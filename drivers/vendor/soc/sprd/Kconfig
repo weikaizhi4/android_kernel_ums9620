@@ -1,0 +1,9 @@
+#
+# Kconfig for the sprd kernel device drivers.
+#
+
+config ZTE_BOOTREASON
+	tristate "Zte Bootreason"
+	default n
+	help
+	  Say Y here, support zte bootreason.

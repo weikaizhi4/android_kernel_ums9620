@@ -1,0 +1,21 @@
+#
+# Goodix Fingerprint driver configuration
+#
+
+config PLATFORM_FINGERPRINT_GOODIX
+       bool "generic goodix fingerprint driver"
+       default n
+       help
+       add support for goodix fingerprint driver.
+
+config GOODIX_NAV_REVERT
+       bool "goodix Fingerprint nav revert"
+       default n
+       help
+       GOODIX Fingerprint nav revert
+
+config GOODIX_NAV_REVERT_NEW
+       bool "goodix Fingerprint nav revert new"
+       default n
+       help
+       GOODIX Fingerprint nav revert new

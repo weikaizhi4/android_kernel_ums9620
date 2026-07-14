@@ -1,0 +1,10 @@
+config ZTE_BREATHING_LIGHT_LEDS
+	bool "ZTE_BREATHING_LIGHT_LEDS"
+		depends on I2C
+		default n
+		help
+		  Say Y here if you have zte breathing light leds chip.
+		  If unsure, say N.
+
+source "drivers/vendor/common/leds/aw210xx/Kconfig"
+source "drivers/vendor/common/leds/aw2016/Kconfig"

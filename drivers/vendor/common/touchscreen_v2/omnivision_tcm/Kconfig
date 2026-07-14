@@ -1,0 +1,28 @@
+#
+# Omnivision TCM touchscreen driver configuration
+#
+
+config TOUCHSCREEN_OMNIVISION_TCM
+	bool "Omnivision TCM touchscreen"
+	default n
+	help
+	  Say Y here if you have a Omnivision TCM touchscreen connected
+	  to your system
+
+	  If unsure, say N.
+
+config TOUCHSCREEN_OMNIVISION_TCM_I2C
+	bool "I2C"
+	default n
+	help
+	  Say Y here to use I2C method
+
+	  If unsure, say N
+
+config TOUCHSCREEN_OMNIVISION_TCM_SPI
+	bool "SPI"
+	default n
+	help
+	  Say Y here to use SPI method
+
+	  If unsure, say N

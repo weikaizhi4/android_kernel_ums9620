@@ -1,0 +1,163 @@
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+lcds {
+		lcd_skyworth_icnl9916_chipone_qunchuang_mipi_hd: lcd_skyworth_icnl9916_chipone_qunchuang_mipi_hd {
+			zte,lcd-init-code-version = "20230109";
+			zte,lcd-backlight-register-bit-length = <0x0C>;
+			zte,lcd-cabc-default-value = <0x01>;
+			zte,lcd-cabc-off-command = [23 00 00 02 55 00];
+			zte,lcd-cabc-low-command = [23 00 00 02 55 01];
+			zte,lcd-cabc-medium-command = [23 00 00 02 55 02];
+			zte,lcd-cabc-high-command = [23 00 00 02 55 03];
+			zte,lcm_backlight_curve_mode = "lcd_brightness_max_450_lux";
+			zte,lcd_bl_vsp_vsn_voltage = <0x14>;
+			zte,lcd-disable-ssc;
+			zte,lcd-disable-mipi-hop;
+			zte,lcd-ctrl-tp-resetpin;
+			zte,panel-name = "lcd_icnl9916_skyworth_qunchuang_6p745_mipi_hd_chipone";
+			zte,lcd-delay-open-bl-value = <30>;
+
+			sprd,dsi-work-mode = <1>; /* video burst mode*/
+			sprd,dsi-lane-number = <4>;
+			sprd,dsi-color-format = "rgb888";
+
+			sprd,phy-bit-clock = <768000>;	/* kbps */
+			sprd,phy-escape-clock = <20000>;/* kHz */
+
+			sprd,video-lp-cmd-enable = <1>;
+			sprd,hporch-lp-disable = <1>;
+			sprd,dpi-clk-div = <6>;
+
+			sprd,width-mm = <70308>;
+			sprd,height-mm = <156240>;
+
+			sprd,esd-check-enable = <1>;/* 0:close , 1:open */
+			sprd,esd-check-mode = <1>;/* 0:REG ,1:TE  */
+			sprd,esd-check-period = <2000>;
+			sprd,esd-check-register = <0x0A>;
+			sprd,esd-check-value = <0x9C>;
+
+			sprd,reset-on-sequence = <1 5>, <0 10>, <1 35>;
+			sprd,reset-off-sequence = <1 5>;
+
+			sprd,use-dcs-write;
+			sprd,initial-command = [
+				39 00 00 03 F0 5A 59
+				39 00 00 03 F1 A5 A6
+				39 00 00 1F B6 00 00 28 08 2E 2F 0C 0E 10
+							12 14 16 18 1A 04 00 00 00 00
+							00 00 00 00 00 00 0C 00 00 3C
+							00
+				39 00 00 1F B7 00 00 29 09 2E 2F 0D 0F 11
+							13 15 17 19 1B 05 00 00 00 00
+							00 00 00 00 00 00 0C 00 00 3C
+							00
+				39 00 00 1A B2 88 89 10 10 44 00 05 82 44
+							52 37 52 37 00 00 00 00 65 4A
+							65 4A 00 00 00 00
+				39 00 00 23 B3 F4 01 01 11 81 65 00 00 4A
+							00 00 00 65 4A 00 00 00 00 00
+							00 00 00 00 00 00 00 00 00 00
+							00 00 00 00 00
+				39 00 00 0F B4 F3 01 01 01 81 65 00 00 4A 00 00 00 65 4A
+				39 00 00 0F B5 10 00 06 0B 06 26 26 00 00 33 44 3B 00 00
+				39 00 00 0D B8 00 00 00 00 00 00 00 00 00 00 00 00
+				39 00 00 0E BC 00 00 00 00 04 00 FF F0 0B 33 50 5B 52
+				39 00 00 07 BD A1 A2 52 2E 00 8F
+				39 00 00 11 BE 0C 88 43 38 33 00 00 38 00 B2 AF B2 AF 00 00 33
+				39 00 00 0A BF 0C 19 0C 19 00 11 04 18 50
+				39 00 00 21 C1 00 20 20 F8 04 10 10 04 40
+							06 22 70 33 31 07 11 84 4C 00
+							93 13 63 00 00 00 00 00 00 00
+							00 00 00
+				15 00 00 02 C2 00
+				39 00 00 09 C3 06 00 FF 00 FF 40 4D 01
+				39 00 00 16 C4 04 32 B8 40 00 BC 00 00 00
+							00 00 00 00 00 00 00 00 00 E0
+							20 F0
+				39 00 00 21 C5 03 21 96 C8 3E 00 03 01 14
+							04 04 18 22 05 00 20 0A 18 C6
+							03 64 FF 01 14 38 20 00 00 00
+							00 00 00
+				39 00 00 21 C6 A0 24 13 2B 2B 28 3F 02 16
+							16 00 01 40 00 98 98 60 80 1B
+							00 00 00 00 00 00 00 00 00 00
+							00 00 00
+				15 00 00 02 D4 31
+				39 00 00 03 FB 55 55
+				39 00 00 21 CA 00 44 00 19 46 94 41 8F 44
+							44 50 50 5A 5A 64 64 32 32 11
+							00 01 01 12 06 22 00 05 00 00
+							5A 5A 04
+				39 00 00 1C C7 77 77 77 77 77 77 77 77 70
+							77 77 77 77 77 77 77 77 70 31
+							00 0D FF FF 40 13 13 43
+				39 00 00 21 80 FF FB F4 EE E8 E3 DE DA D6
+							C8 BD AB 9D 91 87 7E 75 74 6C
+							63 5A 4F 43 33 28 1B 18 14 0F
+							0B 07 03
+				39 00 00 21 81 FF FA F3 EC E6 E0 DB D7 D3
+							C5 B9 A8 9A 8F 85 7C 73 72 6A
+							62 58 4E 42 32 28 1B 17 13 0F
+							0B 06 03
+				39 00 00 21 82 FF FB F3 ED E7 E1 DD D8 D4
+							C6 BB A9 9B 90 86 7D 74 73 6B
+							62 59 4F 42 32 28 1B 17 13 0F
+							0B 06 03
+				39 00 00 0E 83 01 01 00 01 00 01 00 00 00 00 00 00 00
+				39 00 00 1C 84 24 44 10 24 72 74 F0 D1 70
+							20 3D 1D 84 78 E1 0A 4C 30 08
+							32 B6 D4 77 8A 5F 8C 30
+				39 00 00 03 F1 5A 59
+				39 00 00 03 F0 A5 A6
+				39 00 00 03 35 00 00
+
+				39 78 00 03 11 00 00
+				39 0A 00 03 29 00 00
+				39 0A 00 03 6D 02 00
+				];
+
+			sprd,sleep-in-command = [
+				39 00 00 03 6D 25 00
+				39 0A 00 03 28 00 00
+				39 78 00 03 10 00 00
+				];
+
+			sprd,sleep-out-command = [
+				39 78 00 03 11 00 00
+				39 0A 00 03 29 00 00
+				39 0A 00 03 6D 02 00
+				];
+
+			display-timings {
+				native-mode = <&icnl9916_dpt_timng0>;
+				icnl9916_dpt_timng0: timing0 {
+					clock-frequency = <128000000>;
+					hactive = <720>;
+					vactive = <1600>;
+					hback-porch = <40>;
+					hfront-porch = <40>;
+					vback-porch = <32>;
+					vfront-porch = <1020>;
+					hsync-len = <4>;
+					vsync-len = <4>;
+				};
+				icnl9916_dpt_timng1: timing1 {
+					clock-frequency = <128000000>;
+					hactive = <720>;
+					vactive = <1600>;
+					hback-porch = <16>;
+					hfront-porch = <16>;
+					vback-porch = <32>;
+					vfront-porch = <248>;
+					hsync-len = <4>;
+					vsync-len = <4>;
+				};
+			};
+		};
+	};
+};
+};};
+

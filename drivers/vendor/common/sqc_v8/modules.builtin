@@ -1,0 +1,3 @@
+drivers/vendor/common/sqc_v8/sqc_charger.ko
+drivers/vendor/common/sqc_v8/sqc_netlink.ko
+drivers/vendor/common/sqc_v8/sqc_bq2560x.ko

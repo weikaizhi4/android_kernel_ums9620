@@ -1,0 +1,11 @@
+config SND_SMARTPA_AW881XX
+	tristate "SoC Audio for awinic aw881xxseries"
+	depends on I2C
+	help
+        	This option enables support for aw881xxseries Smart PA.
+
+config SND_SEC_I2S_AW881XX
+	tristate "SoC Audio for awinic aw881xxseries"
+	depends on I2C
+	help
+        	This option enables support SEC I2S for aw881xxseries Smart PA.

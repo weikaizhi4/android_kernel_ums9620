@@ -1,0 +1,138 @@
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+ lcds {
+	lcd_easyquick_gc9503_boe_6p26_480p: lcd_easyquick_gc9503_boe_6p26_480p {
+		zte,lcd-init-code-version = "20230216_v0";
+		zte,lcd-backlight-register-bit-length = <0x08>;
+		zte,lcm_backlight_curve_mode = "lcd_brightness_max_350_lux";
+		/*zte,lcd-disable-ssc;*/
+		zte,lcd-delay-open-bl-value = <60>;
+		zte,lcd-close-dynamic-dimming;
+		zte,panel-name = "lcd_easyquick_gc9503_boe_6p26_480p";
+
+
+		sprd,dsi-work-mode = <1>; /* video burst mode*/
+		sprd,dsi-lane-number = <2>;
+		sprd,dsi-color-format = "rgb888";
+
+		sprd,phy-bit-clock = <453000>;	/* kbps */
+		sprd,phy-escape-clock = <20000>;/* kHz */
+
+		sprd,width-mm = <68040>;
+		sprd,height-mm = <143730>;
+
+		sprd,esd-check-enable = <0>;/* 0:close , 1:open */
+		sprd,esd-check-mode = <0>;/* 0:REG ,1:TE  */
+		sprd,esd-check-period = <1000>;
+		sprd,esd-check-register = <0x0A>;
+		sprd,esd-check-value = <0x9C>;
+		sprd,reset-on-sequence = <1 5>, <0 5>, <1 120>;
+		sprd,reset-off-sequence = <0 0>, <0 0>, <1 120>;
+
+		sprd,initial-command = [
+	39 00 00 06 F0 55 AA 52 08 00
+	39 00 00 03 F6 5A 87
+	15 00 00 02 C1 3F
+	15 00 00 02 C2 07
+	15 00 00 02 C6 F8
+	15 00 00 02 C9 10
+	15 00 00 02 CD 25
+	39 00 00 05 86 99 A3 A3 41
+	15 00 00 02 F8 8A
+	15 00 00 02 AC 45
+	15 00 00 02 A7 47
+	15 00 00 02 A0 99
+	39 00 00 05 FA 03 03 00 04
+	15 00 00 02 A3 6A
+	39 00 00 04 FD 28 3C 00
+	15 00 00 02 B1 10
+	39 00 00 03 7A 13 1A
+	39 00 00 03 7B 13 1A
+	39 00 00 21 6D 1F 03 02 08 1E 00 1D 0E 10 0A 0C 1E 1E 1E 1E 1E 1E 1E 1E 1E 1E 0B 09 0F 0D 1D 00 1E 07 01 03 1F
+	39 00 00 11 64 38 0A 03 F6 03 03 38 09 03 F7 03 03 2E 7A 2E 7A
+	39 00 00 11 65 38 08 03 F8 03 03 38 07 03 F9 03 03 2E 7A 2E 7A
+	39 00 00 11 66 38 06 03 FA 03 03 38 05 03 FB 03 03 2E 7A 2E 7A
+	39 00 00 11 67 38 04 03 FC 03 03 38 03 03 FD 03 03 2E 7A 2E 7A
+	39 00 00 09 60 38 0D 2E 7A 38 0C 2E 7A
+	39 00 00 09 61 F4 07 7A 7A 38 09 7A 7A
+	39 00 00 09 62 38 09 7A 7A F4 07 7A 7A
+	39 00 00 09 63 38 0B 2E 7A 38 0A 2E 7A
+	39 00 00 08 69 14 22 14 22 44 22 08
+	15 00 00 02 6B 07
+	39 00 00 35 D1 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 C3 03 1C 03 64 03 89 03 AF 03 BC 03 CC 03 D9 03 EA 03 EA 03 F0 03 FA 03 FF
+	39 00 00 35 D2 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 C3 03 1C 03 64 03 89 03 AF 03 BC 03 CC 03 D9 03 EA 03 EA 03 F0 03 FA 03 FF
+	39 00 00 35 D3 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 C3 03 1C 03 64 03 89 03 AF 03 BC 03 CC 03 D9 03 EA 03 EA 03 F0 03 FA 03 FF
+	39 00 00 35 D4 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 B9 02 DC 03 14 03 39 03 77 03 94 03 AC 03 B9 03 CA 03 E0 03 F0 03 FA 03 FF
+	39 00 00 35 D5 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 B9 02 DC 03 14 03 39 03 77 03 94 03 AC 03 B9 03 CA 03 E0 03 F0 03 FA 03 FF
+	39 00 00 35 D6 00 00 00 3A 00 76 00 AA 00 CC 00 FB 01 27 01 64 01 97 01 E2 02 23 02 79 02 BC 02 B9 02 DC 03 14 03 39 03 77 03 94 03 AC 03 B9 03 CA 03 E0 03 F0 03 FA 03 FF
+	23 78 00 02 11 00
+	39 00 00 03 B8 00 02
+	15 00 00 02 51 00
+	15 00 00 02 53 2C
+	15 00 00 02 55 01
+	23 64 00 02 29 00
+			];
+		sprd,sleep-in-command = [
+	23 14 00 02 6C 60
+	23 00 00 02 B1 00
+	39 14 00 05 FA 7F 00 00 00
+	23 0a 00 02 6c 50
+	23 32 00 02 28 00
+	23 78 00 02 10 00
+	39 00 00 06 F0 55 aa 52 08 00
+	23 00 00 02 c2 ce
+	23 00 00 02 c3 cd
+	23 00 00 02 c6 fc
+	23 00 00 02 c5 03
+	23 00 00 02 cd 64
+	23 00 00 02 c4 ff
+	23 00 00 02 c9 cd
+	39 00 00 03 F6 5a 87
+	39 00 00 04 Fd aa aa 0a
+	39 00 00 03 Fe 6a 0a
+	39 00 00 03 78 2a aa
+	39 00 00 03 92 17 08
+	39 00 00 03 77 aa 2a
+	39 00 00 03 76 aa aa
+	23 00 00 02 84 00
+	39 00 00 03 78 2b ba
+	23 00 00 02 89 73
+	23 00 00 02 88 3A
+	23 00 00 02 85 B0
+	39 00 00 03 76 eb aa
+	23 00 00 02 94 80
+	39 00 00 04 87 04 07 30
+	23 00 00 02 93 27
+	23 00 00 02 af 02
+			];
+		sprd,sleep-out-command = [
+			13 78 00 01 11
+			13 64 00 01 29
+			];
+
+		display-timings {
+			lcd_easyquick_gc9503_boe_6p26_480p_timing0: timing0 {
+			clock-frequency = <32000000>;
+			hactive = <480>;
+			vactive = <1014>;
+			hback-porch = <15>;
+			hfront-porch = <12>;
+			vback-porch = <25>;
+			vfront-porch = <15>;
+			hsync-len = <8>;
+			vsync-len = <8>;
+			};
+		};
+		oled-backlight {
+			default-brightness-level = <102>;
+			sprd,max-level = <255>;
+			brightness-levels = [
+				23 00 00 02 51 00
+				/*23 00 00 02 53 0C*/
+			];
+		};
+	};
+};};
+};};

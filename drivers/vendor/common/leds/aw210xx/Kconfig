@@ -1,0 +1,8 @@
+config ZTE_LEDS_AW210XX
+	tristate "ZTE_LEDS_AW210XX"
+		depends on I2C
+		default n
+		help
+		  Say Y here if you have crypto breathing light leds chip aw210xx.
+		  If unsure, say N.
+

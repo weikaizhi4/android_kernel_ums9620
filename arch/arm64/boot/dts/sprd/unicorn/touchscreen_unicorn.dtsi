@@ -1,0 +1,19 @@
+
+&i2c3 {
+	status = "okay";
+	clock-frequency = <400000>;
+	chipone_tddi@58 {
+		compatible = "chipone-tddi";
+		reg = <0x58>;
+		chipone,rst-gpio = <&ap_gpio 14 0>;
+		chipone,irq-gpio = <&ap_gpio 13 0>;
+		chipone,x-res = <719>;
+		chipone,y-res = <1599>;
+	};
+	gcore_ts@26 {
+		compatible = "gcore,touchscreen";
+		reg = <0x26>;
+		gcore,irq-gpio = <&ap_gpio 13 0>;
+		gcore,rst-gpio = <&ap_gpio 14 0>;
+	};
+};

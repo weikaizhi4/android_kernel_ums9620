@@ -1,0 +1,6 @@
+
+config VENDOR_CONFIG_COMMON_HELPER
+	bool "VENDOR CONFIG HELPER"
+	default n
+	help
+	  Say 'y' here to include support for vendor config helper.

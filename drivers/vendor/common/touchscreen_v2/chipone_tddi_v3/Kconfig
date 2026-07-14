@@ -1,0 +1,12 @@
+#
+# Chipone Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_CHIPONE_V3
+	bool "chipone incell tp SPI method of 9911"
+	default n
+	help
+		Say Y here if you have chipone touchscreen.
+		chipone controllers are multi touch controllers which can
+		report 10 touches at a time.
+		If unsure, say N.

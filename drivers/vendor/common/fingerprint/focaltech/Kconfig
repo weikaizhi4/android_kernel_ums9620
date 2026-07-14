@@ -1,0 +1,9 @@
+#
+# focaltech Fingerprint driver configuration
+#
+
+config PLATFORM_FINGERPRINT_FOCALTECH
+       bool "generic focaltech fingerprint driver"
+       default n
+       help
+       add support for focaltech fingerprint driver.

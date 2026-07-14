@@ -1,0 +1,26 @@
+config VENDOR_SQC_CHARGER_VERSION
+	string "define zte sqc charger version"
+	help
+	This config is to select which zte sqc_version charger driver you want to use.
+
+
+config VENDOR_SQC_CHARGER_V7
+	bool "zte power policy"
+	default n
+	help
+	  Say Y here, if supported zte sqc charger
+
+config VENDOR_SQC_QCOM_QC3PLUS
+	bool "Use Qcom QC3+ protocol chip"
+	default n
+	help
+	  Say Y here, if supported zte sqc qcom QC3+ protocol chip.
+
+config VENDOR_SQC_ZTE_FG
+	bool "Use Qcom QC3+ protocol chip"
+	default n
+	help
+	  Say Y here, if supported zte sqc qcom QC3+ protocol chip.
+
+
+

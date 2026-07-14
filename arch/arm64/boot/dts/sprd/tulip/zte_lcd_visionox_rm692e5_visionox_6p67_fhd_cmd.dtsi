@@ -1,0 +1,180 @@
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+			lcds {
+				lcd_visionox_rm692e5_visionox_mipi_hdplus_visionox: lcd_visionox_rm692e5_visionox_mipi_hdplus_visionox {
+					zte,lcd-init-code-version = "20230309";
+
+					zte,lcd-backlight-register-bit-length = <0x0B>;
+					zte,lcm_backlight_curve_mode = "lcd_brightness_max_450_lux";
+					zte,lcd_bl_vsp_vsn_voltage = <0x14>;
+					zte,lcd-disable-ssc;
+					zte,panel-name = "lcd_visionox_rm692e5_visionox_mipi_hdplus_visionox";
+					zte,lcd-delay-open-bl-value = <51>;
+					zte,lcd-version-v000;
+					zte,lcd-disable-mipi-hop;
+					zte,lcd-reset-down-before-vsp;
+
+					sprd,dsi-work-mode = <0>;
+					sprd,dsi-lane-number = <4>;
+					sprd,dsi-color-format = "rgb888";
+
+					sprd,dpi-clk-div = <0>;
+					sprd,video-lp-cmd-enable = <0>;
+					sprd,hporch-lp-disable = <0>;
+
+					sprd,phy-bit-clock = <1180000>;
+					sprd,phy-escape-clock = <20000>;/* kHz */
+
+					sprd,width-mm = <68430>;
+					sprd,height-mm = <152570>;
+
+					sprd,esd-check-enable = <0>;/* 0:close , 1:open */
+					sprd,esd-check-mode = <1>;/* 0:REG ,1:TE  */
+					sprd,esd-check-period = <2000>;
+					sprd,esd-check-register = <0x0A>;
+					sprd,esd-check-value = <0x9C>;
+
+					sprd,dphy-taget-val = <5>;
+
+					sprd,reset-on-sequence = <1 5>, <0 10>, <1 35>;
+					sprd,reset-off-sequence = <1 20>;
+
+					sprd,use-dcs-write;
+					sprd,initial-command = [
+						/*ACL code */
+						15 00 00 02 FE 00
+						15 00 00 02 55 00
+						15 00 00 02 FE 34
+						15 00 00 02 47 03
+						15 00 00 02 48 00
+						15 00 00 02 00 00
+						15 00 00 02 FE 34
+						15 00 00 02 9F 38
+						15 00 00 02 A0 04
+						15 00 00 02 1E 00
+						15 00 00 02 1F 00
+						15 00 00 02 20 00
+						15 00 00 02 22 00
+						15 00 00 02 21 70
+						15 00 00 02 23 F8
+						15 00 00 02 24 77
+						15 00 00 02 25 F8
+						15 00 00 02 26 F8
+						15 00 00 02 2F 00
+						15 00 00 02 30 00
+						15 00 00 02 31 00
+						15 00 00 02 32 00
+						15 00 00 02 33 00
+						15 00 00 02 34 00
+						15 00 00 02 35 00
+						15 00 00 02 36 4C
+						15 00 00 02 37 00
+						15 00 00 02 38 E9
+						15 00 00 02 39 01
+						15 00 00 02 3A 53
+						15 00 00 02 3B 00
+						15 00 00 02 3D 00
+						15 00 00 02 3F 00
+						15 00 00 02 40 00
+						15 00 00 02 41 00
+						15 00 00 02 42 00
+						/*init code */
+						15 00 00 02 FE 12
+						15 05 00 02 83 10
+
+						15 00 00 02 FE 40
+						15 00 00 02 BD 00
+						/* DVDD 1.2V */
+						15 00 00 02 90 46
+						15 00 00 02 40 08
+						/* LVD code*/
+						15 00 00 02 FE A0
+						15 00 00 02 06 32
+						15 00 00 02 FE D0
+						15 00 00 02 11 75
+						15 00 00 02 92 03
+						15 00 00 02 FE A1
+						15 00 00 02 CD 6B
+						15 00 00 02 CE BB
+						15 00 00 02 FE D1
+						15 00 00 02 B4 01
+						15 00 00 02 FE 38
+						15 00 00 02 17 0F
+						15 00 00 02 18 0F
+						15 00 00 02 FE 42
+						15 00 00 02 21 44
+
+						15 00 00 02 FE 00
+						15 00 00 02 FA 07
+						15 00 00 02 C2 08
+						15 00 00 02 35 00
+						39 00 00 03 51 00 00
+						05 50 00 01 11
+						05 0A 00 01 29
+					];
+
+					sprd,sleep-in-command = [
+						15 C8 00 01 28
+						15 0A 00 01 10
+						];
+					sprd,sleep-out-command = [
+						05 50 00 01 11
+						05 0A 00 01 29
+						];
+					sprd,doze-in-command = [
+						15 00 00 02 FE A0
+						15 00 00 02 25 C0
+						15 00 00 02 FE 00
+						05 00 00 01 39
+						];
+					sprd,doze-out-command = [
+						15 00 00 02 FE 00
+						05 00 00 01 38
+						15 00 00 02 FE A0
+						15 00 00 02 25 40
+						15 00 00 02 FE 00
+						];
+					zte,fps60-to-fps90 = [
+						15 00 00 02 FE 40
+						15 00 00 02 BD 05
+						15 00 00 02 FE 00
+					];
+					zte,fps90-to-fps60 = [
+						15 00 00 02 FE 40
+						15 00 00 02 BD 00
+						15 00 00 02 FE 00
+					];
+					zte,fps-to-fps120 = [
+						15 00 00 02 FE 40
+						15 00 00 02 BD 06
+						15 00 00 02 FE 00
+					];
+					display-timings {
+						native-mode = <&lcd_visionox_rm692e5_visionox_fhd_timing0>;
+						lcd_visionox_rm692e5_visionox_fhd_timing0: timing0 {
+							clock-frequency = <192000000>;
+							hactive = <1080>;
+							vactive = <2400>;
+							hback-porch = <0>;
+							hfront-porch = <0>;
+							vback-porch = <0>;
+							vfront-porch = <0>;
+							hsync-len = <0>;
+							vsync-len = <0>;
+						};
+					};
+					oled-backlight {
+						default-brightness-level = <1632>;
+						sprd,max-level = <2047>;
+						brightness-levels = [
+							39 00 00 03 51 00 00
+							39 00 00 02 53 2C
+						];
+					};
+				};
+			};
+		};
+	};
+};

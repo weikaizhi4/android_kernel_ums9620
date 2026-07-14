@@ -1,0 +1,60 @@
+
+menuconfig POWER_VENDOR_COMMON
+	tristate "zte vendor common"
+	default n
+	help
+	  Say Y here, if supported zte power policy
+
+config VENDOR_ZTE_MISC
+	tristate "zte misc module"
+	default n
+	help
+	  Say Y here to enable the "pmic voter module" driver
+
+config VENDOR_POWER_VOTER
+	tristate "pmic voter module"
+	default n
+	help
+	  Say Y here to enable the "pmic voter module" driver
+
+config CHGING_WITH_VOTER
+	tristate "charging setting use voter module"
+	default n
+	help
+	  Say Y here to enable the "charging setting use voter module" driver
+
+config VENDOR_BATTERY_CAPACITY_LEARNING
+	tristate "Battery Capacity Learning driver"
+	default n
+	help
+	  Say Y here to enable the "Battery Capacity Learning" driver
+
+config VENDOR_CHARGE_ARBITRATE_SERVICE
+	tristate "Charge Arbitrate Service Driver"
+	default n
+	help
+	  Say Y here to enable the "Charge Arbitrate Service" driver
+
+config VENDOR_CHARGE_ARBITRATE_SERVICE_COMMON
+	tristate "Charge Arbitrate Service Driver COMMON"
+	default n
+	help
+	  Say Y here to enable the "Charge Arbitrate Service Common" driver
+
+config VENDOR_CHARGER_POLICY_SERVICE
+	tristate "Charger Policy Service Driver"
+	default n
+	help
+	  Say Y here to enable the "Charger Policy Service" driver
+
+config VENDOR_CPU_RATE_CTRL
+	tristate "use cpu rate ctrl charging current"
+	default n
+	help
+	  Say Y here to enable the "Charger Policy Service" driver
+
+config VENDOR_MTK_FG_RES_2MO
+	tristate "Control the sampling resistor of the mtk fuel gauge using 2 milliohms"
+	default n
+	help
+	  Say Y here to enable the "mtk fuel gauge using 2 milliohms" driver

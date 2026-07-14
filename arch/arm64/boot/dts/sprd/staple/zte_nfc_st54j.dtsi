@@ -1,0 +1,28 @@
+&i2c2 {
+        status = "okay";
+        nfc@8 {
+                compatible = "st,st21nfc";
+                reg = <0x8>;
+                interrupt-parent = <&ap_gpio>;
+                interrupts = <9 0>;
+                irq-gpios = <&ap_gpio 127 0>;
+                reset-gpios = <&ap_gpio 150 0>;
+                clkreq-gpios = <&ap_gpio 147 0>;
+                interrupt-names = "nfc_int";
+                clock-names = "clk_aux1","ext_26m","aux1_eb";
+                clocks = <&aonapb_gate CLK_AUX1>, <&pmu_gate CLK_26M_AUD>, <&aonapb_gate CLK_AUX1_EB>;
+        };
+};
+&spi2 {
+	status = "okay";
+        st54spi@0 {
+                compatible = "st,st54spi";
+                reg = <0>;
+                spi-max-frequency = <1000000>;
+                gpio-power_nreset-std = <&ap_gpio 119 0>;
+                /*pinctrl-names = "pinctrl_state_mode_idle", "pinctrl_state_mode_spi";
+                pinctrl-0 = <&pinctrl_state_mode_idle>;
+                pinctrl-1 = <&pinctrl_state_mode_spi>;*/
+                power_mode = "ST54J";
+        };
+};

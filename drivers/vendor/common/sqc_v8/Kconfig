@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-2.0-only
+config VENDOR_SQC_MODULE
+	tristate "sqc power policy"
+	help
+	  Say Y here, if supported zte sqc charger
+
+config VENDOR_SQC_CHARGER_V8
+	bool "sqc power v8"
+	default n
+	help
+	  Say Y here, if supported zte sqc charger v8
+
+config VENDOR_SQC_NETLINK
+	tristate "sqc power NETLINK"
+	help
+	  Say Y here, if supported zte sqc charger NETLINK
+
+config VENDOR_SQC_BQ2560X
+	tristate "sqc power bq2560x"
+	help
+	  Say Y here, if supported zte sqc charger BQ2560X
+
+config VENDOR_SQC_BQ2597X
+	tristate "sqc power bq2597x"
+	help
+	  Say Y here, if supported zte sqc charger bq2597x

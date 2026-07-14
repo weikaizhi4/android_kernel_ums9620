@@ -1,0 +1,5 @@
+config SAR_PARA
+	string "config sar param"
+	default "default"
+	help
+		Sar sensor param macro

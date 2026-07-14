@@ -1,0 +1,23 @@
+/ {
+	fpc1020 {
+		compatible = "fpc,fpc1020";
+		#fpc_irq = <&ap_gpio 168 0x00>;
+		fpc_irq = <&eic_async 29 0x00>;
+		fpc_rst = <&ap_gpio 169 0x00>;
+		fpc_vdd = <&ap_gpio 172 0x00>;
+	};
+ 	goodix_fp {
+		compatible = "goodix,fingerprint";
+		fp-gpio-reset = <&ap_gpio 169 0x00>;
+		#fp-gpio-irq = <&ap_gpio 168 0x00>;
+		fp-gpio-irq = <&eic_async 29 0x00>;
+		fp-gpio-pwr = <&ap_gpio 172 0x00>;
+	};
+	chipone_fp {
+		compatible = "chipone,fingerprint";
+		fpreset-gpios = <&ap_gpio 169 0x00>;
+		#fpint-gpios = <&ap_gpio 168 0x00>;
+		fpint-gpios = <&eic_async 29 0x00>;
+		fppwr-gpios = <&ap_gpio 172 0x00>;
+	};
+};

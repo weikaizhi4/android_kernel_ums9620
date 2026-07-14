@@ -1,0 +1,23 @@
+&i2c3 {
+	clock-frequency = <400000>;
+	status = "okay";
+	/delete-node/ touchscreen@38;
+	tlsc6x_ts@2e {
+		compatible = "tlsc6x,tlsc6x_ts";
+		reg = <0x2e>;
+		gpios = <&ap_gpio 145 0
+			&ap_gpio 144 0>;
+		vdd_name = "vdd28";
+		TP_MAX_X = <480>;
+		TP_MAX_Y = <1014>;
+	};
+	betterlife_ts@2c{
+		compatible = "BTL,betterlife_ts";
+		reg = <0x2c>;
+		gpios = <&ap_gpio 145 0
+                 &ap_gpio 144 0>;
+		vcc_name = "vdd28";
+		TP_MAX_X = <480>;
+		TP_MAX_Y = <1014>;
+	};
+};

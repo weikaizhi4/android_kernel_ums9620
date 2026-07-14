@@ -1,0 +1,17 @@
+config SAR_SENSOR_AW9610X
+	tristate "SAR_SENSOR_AW9610X"
+		depends on I2C
+		default n
+		help
+			Say Y here to build support for sensor hub new.
+			To compile this driver as a module, choose M here.
+
+config SAR_SENSOR_AW9610X_2
+	tristate "SAR_SENSOR_AW9610X_2"
+		depends on I2C
+		default n
+		help
+			Say Y here to build support for sensor hub new.
+			To compile this driver as a module, choose M here.
+
+source "drivers/vendor/common/sensor/sar/aw9610x/Kconfig"

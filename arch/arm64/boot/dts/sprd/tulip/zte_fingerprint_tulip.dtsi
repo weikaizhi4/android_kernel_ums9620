@@ -1,0 +1,16 @@
+/ {
+	fpc1020 {
+		compatible = "fpc,fpc1020";
+		fpc_rst = <&ap_gpio 110 0x00>;
+		#fpc_irq = <&ap_gpio 109 0x00>;
+		fpc_irq = <&eic_async 29 0x00>;
+		fpc_vdd = <&ap_gpio 62 0x00>;
+	};
+	silead_fp {
+		compatible = "sil,silead_fp";
+		rst-gpios = <&ap_gpio 110 0x00>;
+		#irq-gpios = <&ap_gpio 109 0x00>;
+		irq-gpios = <&eic_async 29 0x00>;
+		avdd-gpios = <&ap_gpio 62 0x00>;
+	};
+};

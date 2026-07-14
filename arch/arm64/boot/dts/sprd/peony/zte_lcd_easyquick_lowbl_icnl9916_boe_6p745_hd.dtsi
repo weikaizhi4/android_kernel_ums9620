@@ -1,0 +1,126 @@
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+lcds {
+		lcd_easyquick_lowbl_icnl9916_chipone_boe_mipi_hd: lcd_easyquick_lowbl_icnl9916_chipone_boe_mipi_hd {
+			zte,lcd-init-code-version = "20230109";
+			zte,lcd-backlight-register-bit-length = <0x0C>;
+			zte,lcd-cabc-default-value = <0x01>;
+			zte,lcd-cabc-off-command = [23 00 00 02 55 00];
+			zte,lcd-cabc-low-command = [23 00 00 02 55 01];
+			zte,lcd-cabc-medium-command = [23 00 00 02 55 02];
+			zte,lcd-cabc-high-command = [23 00 00 02 55 03];
+			zte,lcm_backlight_curve_mode = "lcd_brightness_max_450_lux";
+			zte,lcd_bl_vsp_vsn_voltage = <0x14>;
+			zte,lcd-disable-ssc;
+			zte,lcd-disable-mipi-hop;
+			zte,lcd-ctrl-tp-resetpin;
+			zte,panel-name = "lcd_icnl9916_easyquick_lowbl_boe_6p745_mipi_hd_chipone";
+			zte,lcd-delay-open-bl-value = <30>;
+
+			sprd,dsi-work-mode = <1>; /* video burst mode*/
+			sprd,dsi-lane-number = <4>;
+			sprd,dsi-color-format = "rgb888";
+
+			sprd,phy-bit-clock = <768000>;	/* kbps */
+			sprd,phy-escape-clock = <20000>;/* kHz */
+
+			sprd,video-lp-cmd-enable = <1>;
+			sprd,hporch-lp-disable = <1>;
+			sprd,dpi-clk-div = <6>;
+
+			sprd,width-mm = <70308>;
+			sprd,height-mm = <156240>;
+
+			sprd,esd-check-enable = <1>;/* 0:close , 1:open */
+			sprd,esd-check-mode = <1>;/* 0:REG ,1:TE  */
+			sprd,esd-check-period = <2000>;
+			sprd,esd-check-register = <0x0A>;
+			sprd,esd-check-value = <0x9C>;
+
+			sprd,reset-on-sequence = <1 5>, <0 10>, <1 35>;
+			sprd,reset-off-sequence = <1 5>;
+
+			sprd,use-dcs-write;
+			sprd,initial-command = [
+39 00 00 03 F0 5A 59
+39 00 00 03 F1 A5 A6
+39 00 00 21 B2 95 96 05 04 FF 33 09 83 33 0A 5A 0A 5A 0A 5A 0A 5A 0A 60 0A 61 00 00 00 00 55 55 10 20 11 00 00
+39 00 00 21 B3 74 05 02 05 81 6B 0B 05 5A 0A 05 00 08 44 0C 00 03 00 00 00 00 00 00 00 00 00 0F FF F0 00 00 00
+39 00 00 21 B4 31 01 01 01 81 00 00 00 00 00 00 00 00 00 0C 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+39 00 00 21 B5 10 16 06 16 06 C6 26 01 A2 33 44 00 26 00 75 7C 02 08 20 30 50 20 40 12 00 00 00 00 00 00 00 00
+39 00 00 21 B6 00 00 F3 00 04 06 10 12 0C 0E 32 32 00 00 00 00 00 00 00 00 00 00 7F F0 00 00 00 00 00 00 00 00
+39 00 00 21 B7 00 00 F3 00 05 07 11 13 0D 0F 32 32 00 00 00 00 00 00 00 00 00 00 7F F0 00 00 00 00 00 00 00 00
+39 00 00 21 B9 00 55 55 55 55 55 50 55 55 55 55 55 50 AA AA AA AA AA A0 AA AA AA AA AA A0 00 00 00 00 00 00 00
+39 00 00 09 BB 01 02 03 0A 04 13 14 12
+39 00 00 21 BC 00 00 00 00 04 00 FF F0 0B 33 50 4B 33 33 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+39 00 00 07 BD A1 A2 52 2E 00 8F
+39 00 00 11 BE 0C 88 43 38 33 00 00 38 00 B2 AF B2 AF 00 00 33
+39 00 00 0A BF 0C 19 0C 19 00 11 04 18 50
+39 00 00 21 C7 76 54 32 22 34 56 77 77 30 76 54 32 22 34 56 77 77 30 34 00 01 FF FF 40 08 22 03 00 00 00 00 00
+39 00 00 21 80 FF FB F5 F0 EB E7 E3 DF DC D1 C8 B9 AD A2 97 8D 82 81 76 6A 5E 50 40 30 25 18 14 10 0D 0A 07 04
+39 00 00 21 81 FF FB F4 EE E9 E4 E0 DD D9 CE C5 B6 AA 9F 95 8A 7F 7E 73 67 5B 4D 3E 2E 24 17 13 0F 0D 0A 07 04
+39 00 00 21 82 FF FB F5 EF EA E6 E2 DE DB CF C6 B7 AC A0 96 8C 80 7F 74 69 5C 4F 3F 2F 24 17 13 0F 0D 0A 07 04
+39 00 00 0E 83 01 00 00 00 00 00 00 00 00 00 00 00 00
+39 00 00 1C 84 2E A7 81 8F 62 50 55 BD C0 15 BC 82 82 13 B2 06 14 80 11 81 2B 24 B8 C1 AF 68 80
+39 00 00 05 C0 40 93 00 1F
+39 00 00 15 C1 00 F8 20 20 04 10 10 04 40 06 22 70 33 31 07 11 84 4C 00 93
+15 00 00 02 C2 00
+39 00 00 09 C3 06 00 FF 00 FF 40 4D 01
+39 00 00 16 C4 04 33 B8 40 00 BC 00 A0 00 00 00 00 00 00 00 00 00 04 E0 20 F0
+39 00 00 1B C5 03 23 96 C8 32 00 05 02 12 0C 00 32 3F 08 01 3F 16 0E C8 03 55 FF 01 14 38 7F
+39 00 00 13 C6 87 24 16 2B 2B 28 3F 03 16 25 00 11 40 00 98 98 60 80
+39 00 00 05 C8 46 00 C8 92
+39 00 00 21 CA 00 40 00 19 46 94 41 8F 44 44 50 50 5A 5A 64 64 32 32 11 00 01 01 0A 06 22 00 05 00 00 5B 5A 04
+15 00 00 02 D4 31
+39 00 00 03 FB 54 54
+39 00 00 03 F1 5A 59
+39 00 00 03 F0 A5 A6
+39 00 00 03 35 00 00
+39 78 00 03 11 00 00
+39 0A 00 03 29 00 00
+39 0A 00 03 6D 02 00
+				];
+
+			sprd,sleep-in-command = [
+				39 00 00 03 6D 25 00
+				39 14 00 03 28 00 00
+				39 78 00 03 10 00 00
+				];
+
+			sprd,sleep-out-command = [
+				39 78 00 03 11 00 00
+				39 0A 00 03 29 00 00
+				39 0A 00 03 6D 02 00
+				];
+
+			display-timings {
+				native-mode = <&lowbl_icnl9916_boe_dpt_timng0>;
+				lowbl_icnl9916_boe_dpt_timng0: timing0 {
+					clock-frequency = <128000000>;
+					hactive = <720>;
+					vactive = <1600>;
+					hback-porch = <16>;
+					hfront-porch = <16>;
+					vback-porch = <248>;
+					vfront-porch = <970>;
+					hsync-len = <4>;
+					vsync-len = <4>;
+				};
+				lowbl_icnl9916_boe_dpt_timng1: timing1 {
+					clock-frequency = <128000000>;
+					hactive = <720>;
+					vactive = <1600>;
+					hback-porch = <16>;
+					hfront-porch = <16>;
+					vback-porch = <248>;
+					vfront-porch = <32>;
+					hsync-len = <4>;
+					vsync-len = <4>;
+				};
+			};
+		};
+	};
+};
+};};

@@ -1,0 +1,29 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+
+#include "touchscreen_staple.dtsi"
+#include "zte_charger_staple.dtsi"
+#include "zte_audio_staple.dtsi"
+#include "zte_camera_staple.dtsi"
+#include "zte_nfc_st54j.dtsi"
+
+/{
+	zte_tp:zte_tp {
+		compatible = "zte_tp";
+		zte,tp_algo;
+		zte,tp_long_press;
+		zte,tp_long_press_timer = <800>;
+		zte,tp_long_press_left_v = <20>;
+		zte,tp_long_press_right_v = <20>;
+		zte,tp_long_press_left_h = <25>; /*camera */
+		zte,tp_long_press_right_h = <20>; /*charger */
+		zte,tp_edge_click_suppression_pixel = <3>;
+	};
+
+
+	zcard_holder_det {
+		zcard-holder-det-gpios= <&eic_sync 36 GPIO_ACTIVE_HIGH>;
+	};
+};

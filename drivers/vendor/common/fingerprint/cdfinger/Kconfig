@@ -1,0 +1,10 @@
+#
+# CDFINGER Fingerprint driver configuration
+#
+
+config PLATFORM_FINGERPRINT_CDFINGER
+       bool "FPS Fingerprint"
+       default n
+       ---help---
+       cdfinger Fingerprint chip FPS980S TEE driver
+

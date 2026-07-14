@@ -1,0 +1,90 @@
+&i2c5 {
+	clock-frequency = <400000>;
+	status = "okay";
+	/* aw210xx_led@20 {
+		compatible = "awinic,aw210xx_led";
+		reg = <0x20>;
+		enable-gpio = <&ap_gpio 39 0>;
+		global_current = <0xff>;
+		osc_clk = <1>;
+		br_res = <1>;
+		status = "okay";
+		aw210xx,led {
+			aw210xx,name = "aw_led";
+			aw210xx,imax = <1>;
+			aw210xx,brightness = <128>;
+			aw210xx,max_brightness = <255>;
+		};
+		aw210xx,red_led {
+			aw210xx,name = "red";
+			aw210xx,imax = <1>;
+			aw210xx,brightness = <255>;
+			aw210xx,max_brightness = <255>;
+		};
+		aw210xx,green_led {
+			aw210xx,name = "green";
+			aw210xx,imax = <1>;
+			aw210xx,brightness = <255>;
+			aw210xx,max_brightness = <255>;
+		};
+		aw210xx,blue_led {
+			aw210xx,name = "blue";
+			aw210xx,imax = <1>;
+			aw210xx,brightness = <255>;
+			aw210xx,max_brightness = <255>;
+		};
+	}; */
+	aw2016_led@64 {
+		compatible = "awinic,aw2016_led";
+		reg = <0x64>;
+		aw2016,red {
+			aw2016,name = "red";
+			aw2016,id = <0>;
+			aw2016,imax = <2>;
+			aw2016,led-current = <3>;
+			aw2016,max-brightness = <255>;
+			aw2016,rise-time-ms = <1040>;
+			aw2016,hold-time-ms = <0>;
+			aw2016,fall-time-ms = <1040>;
+			aw2016,off-time-ms = <510>;
+		};
+		aw2016,green {
+			aw2016,name = "green";
+			aw2016,id = <1>;
+			aw2016,imax = <2>;
+			aw2016,led-current = <3>;
+			aw2016,max-brightness = <255>;
+			aw2016,rise-time-ms = <1040>;
+			aw2016,hold-time-ms = <0>;
+			aw2016,fall-time-ms = <1040>;
+			aw2016,off-time-ms = <510>;
+		};
+		aw2016,blue {
+			aw2016,name = "blue";
+			aw2016,id = <2>;
+			aw2016,imax = <2>;
+			aw2016,led-current = <3>;
+			aw2016,max-brightness = <255>;
+			aw2016,rise-time-ms = <1040>;
+			aw2016,hold-time-ms = <0>;
+			aw2016,fall-time-ms = <1040>;
+			aw2016,off-time-ms = <510>;
+		};
+		aw2016,led {
+			aw2016,name = "aw_led";
+			aw2016,id = <3>;
+			aw2016,imax = <2>;
+			aw2016,red-current = <15>;  /* 0 - 15 */
+			aw2016,green-current = <15>;  /* 0 - 15 */
+			aw2016,blue-current = <15>;  /* 0 - 15 */
+			aw2016,max-brightness = <255>;
+			aw2016,brightness = <255>;  /* 0 - max-brightness */
+			aw2016,rise-time-ms = <1040>;
+			aw2016,hold-time-ms = <0>;
+			aw2016,fall-time-ms = <1040>;
+			aw2016,off-time-ms = <510>;
+			aw2016,delay-time-ms = <0>;
+			aw2016,repeat_times = <0>;
+		};
+	};
+};

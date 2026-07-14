@@ -1,0 +1,15 @@
+config NFC_ST21NFCJ
+	bool "NFC_ST21NFCJ Controller"
+	---help---
+	  You'll have to say Y if your computer contains an NFC_ST21NFCJ I2C device that
+	  you want to use under Linux.
+
+	  You can say N here if you don't have any NFC_ST21NFCJ I2C connected to your computer.
+
+config NFC_ST54J
+	bool "NFC_ST54J Controller"
+	---help---
+	  You'll have to say Y if your computer contains an NFC_ST54J I2C device that
+	  you want to use under Linux.
+
+	  You can say N here if you don't have any NFC_ST54J I2C connected to your computer.

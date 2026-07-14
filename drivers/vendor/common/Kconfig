@@ -1,0 +1,69 @@
+
+config VENDOR_COMMON_COMPILE
+	bool "drivers/vendor/common drivers compile control"
+	default n
+	help
+	  This enables drivers/vendor/common drivers to be compiled.
+
+config VENDOR_SOC_QCOM_COMPILE
+	bool "drivers/vendor/soc/qcom drivers compile control"
+	default n
+	help
+	  This enables drivers/vendor/soc/qcom drivers to be compiled.
+
+config VENDOR_SOC_MTK_COMPILE
+	bool "drivers/vendor/soc/mediatek drivers compile control"
+	default n
+	help
+	  This enables drivers/vendor/soc/mediatek drivers to be compiled.
+
+config VENDOR_SOC_SPRD_COMPILE
+	bool "drivers/vendor/soc/sprd drivers compile control"
+	default n
+	help
+	  This enables drivers/vendor/soc/sprd drivers to be compiled.
+
+config SOC_QCOM
+	bool "qcom common drivers"
+	default n
+	help
+	  This enables support for common driver in qcom platform.
+
+config SOC_MTK
+	bool "MTK common drivers"
+	default n
+	help
+	  This enables support for common driver in MTK platform.
+
+config SOC_SPRD
+	bool "spred common drivers"
+	default n
+	help
+	  This enables support for common driver in sprd platform.
+
+config VENDOR_SQC_CHARGER
+	bool "sqc charger platform common drivers"
+	default n
+	help
+	  This enables support for platform sqc common driver.
+
+source "drivers/vendor/common/touchscreen_v2/Kconfig"
+source "drivers/vendor/common/nxp_tfa9894/Kconfig"
+source "drivers/vendor/common/power/Kconfig"
+source "drivers/vendor/common/sqc/Kconfig"
+source "drivers/vendor/common/sqc_v2/Kconfig"
+source "drivers/vendor/common/sqc_base/Kconfig"
+source "drivers/vendor/common/sqc_v7/Kconfig"
+source "drivers/vendor/common/vcfg/Kconfig"
+source "drivers/vendor/common/awinic/Kconfig"
+source "drivers/vendor/common/tfa9873/Kconfig"
+source "drivers/vendor/common/sensor/Kconfig"
+source "drivers/vendor/common/leds/Kconfig"
+source "drivers/vendor/common/zlog/Kconfig"
+source "drivers/vendor/common/sqc_v8/Kconfig"
+source "drivers/vendor/common/zcard_det/Kconfig"
+
+##### Fingerprint #####
+source "drivers/vendor/common/fingerprint/Kconfig"
+#lcd
+source "drivers/vendor/common/zte_lcdbl/Kconfig"

@@ -1,0 +1,32 @@
+/ {
+	fpc1020 {
+		compatible = "fpc,fpc1020";
+		fpc_rst = <&ap_gpio 110 0x00>;
+		#fpc_irq = <&ap_gpio 109 0x00>;
+		fpc_irq = <&eic_async 29 0x00>;
+		#fp-gpio-pwr = <&ap_gpio 131 0x00>;
+		vdd-supply = <&vddcammot1>;
+		power-type = <1>;
+		power-voltage = <3000000>;
+	};
+	goodix_fp {
+		compatible = "goodix,fingerprint";
+		fp-gpio-reset = <&ap_gpio 110 0x00>;
+		#fp-gpio-irq = <&ap_gpio 109 0x00>;
+		fp-gpio-irq = <&eic_async 29 0x00>;
+		#fp-gpio-pwr = <&ap_gpio 131 0x00>;
+		vdd-supply = <&vddcammot1>;
+		power-type = <1>;
+		power-voltage = <3000000>;
+	};
+	chipone_fp {
+		compatible = "chipone,fingerprint";
+		fpreset-gpios = <&ap_gpio 110 0x00>;
+		#fpint-gpios = <&ap_gpio 109 0x00>;
+		fpint-gpios = <&eic_async 29 0x00>;
+		#fppwr-gpios = <&ap_gpio 131 0x00>;
+		vdd-supply = <&vddcammot1>;
+		power-type = <1>;
+		power-voltage = <3000000>;
+	};
+};

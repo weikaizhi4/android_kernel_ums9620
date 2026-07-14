@@ -1,0 +1,10 @@
+#
+# Egis Fingerprint driver configuration
+#
+
+config PLATFORM_FINGERPRINT_EGIS
+	bool "Egis Fingerprint"
+	default n
+	---help---
+	Egis Fingerprint chip ET552 TEE driver
+

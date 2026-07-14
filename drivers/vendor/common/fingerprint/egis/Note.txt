@@ -1,0 +1,21 @@
+ueventd.rc
+/sys/devices/platform/egis_input/navigation_event  6660   system     system
+/sys/devices/platform/egis_input/navigation_enable 6660   system     system
+/sys/devices/platform/egis_input/navigation_event		u:object_r:sysfs_ets:s0
+/sys/devices/platform/egis_input/navigation_enable		u:object_r:sysfs_ets:s0
+
+hal_fingerprint.te
+allow hal_fingerprint sysfs_ets:file rw_file_perms;
+
+file.te:
+type sysfs_ets, sysfs_type, fs_type;
+
+confirm whether the node exists and the read-write permission of this node
+/sys/devices/platform/egis_input/navigation_event
+
+let SDK know Navigation status
+adb shell cat /sys/devices/platform/egis_input/navigation_enable
+
+Navigation Key Eevent 
+getevent
+getevent /dev/input/event3

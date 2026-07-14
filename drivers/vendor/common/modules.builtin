@@ -1,0 +1,12 @@
+drivers/vendor/common/power/zte_misc.ko
+drivers/vendor/common/power/charger_policy_service.ko
+drivers/vendor/common/sqc_v8/sqc_charger.ko
+drivers/vendor/common/sqc_v8/sqc_netlink.ko
+drivers/vendor/common/sqc_v8/sqc_bq2560x.ko
+drivers/vendor/common/touchscreen_v2/lcd_state_notify.ko
+drivers/vendor/common/touchscreen_v2/zte_tpd.ko
+drivers/vendor/common/zcard_det/zte_card_holder_det.ko
+drivers/vendor/common/zlog/zlog_common/zlog_common_dlkm.ko
+drivers/vendor/common/zlog/zlog_exception/zlog_exception_dlkm.ko
+drivers/vendor/common/zlog/zlog_test/zlog_test_dlkm.ko
+drivers/vendor/common/zte_lcdbl/zte_lcdbl_vsp_vsn.ko

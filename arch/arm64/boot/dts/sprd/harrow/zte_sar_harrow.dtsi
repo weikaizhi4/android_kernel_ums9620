@@ -1,0 +1,23 @@
+/* add zte sar start */
+&i2c2 {
+	status = "okay";
+	aw9160x_sar@13 {
+		compatible = "awinic,aw9610x_sar";
+		reg = <0x13>;
+
+		irq-gpio = <&ap_gpio 132 0>;
+		chip_name = "AW96103";
+		status = "okay" ;
+	};
+
+	aw9160x_sar@12 {
+		compatible = "awinic,aw9610x_sar_2";
+		reg = <0x12>;
+
+		irq-gpio = <&ap_gpio 132 0>;
+		chip_name = "AW96103";
+		status = "okay" ;
+	};
+};
+
+/* add zte sar end */

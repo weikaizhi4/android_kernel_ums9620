@@ -1,0 +1,15 @@
+#
+# chipone Fingerprint driver configuration
+#
+
+config PLATFORM_FINGERPRINT_CHIPONE
+       bool "generic chipone fingerprint driver"
+       default n
+       help
+       add support for chipone fingerprint driver.
+
+config CHIPONE_NAV_NEW
+       bool "chipone Fingerprint nav new"
+       default n
+       help
+       CHIPONE Fingerprint nav new

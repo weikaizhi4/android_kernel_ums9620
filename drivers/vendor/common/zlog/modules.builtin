@@ -1,0 +1,3 @@
+drivers/vendor/common/zlog/zlog_common/zlog_common_dlkm.ko
+drivers/vendor/common/zlog/zlog_exception/zlog_exception_dlkm.ko
+drivers/vendor/common/zlog/zlog_test/zlog_test_dlkm.ko

@@ -1,0 +1,63 @@
+#
+# Touchscreen driver configuration
+#
+config TOUCHSCREEN_VENDOR_V2
+	tristate "Touchscreens"
+	default n
+	help
+	  Say Y here, and a list of supported touchscreens will be displayed.
+	  This option doesn't affect the kernel.
+
+	  If unsure, say n.
+
+source "drivers/vendor/common/touchscreen_v2/goodix_berlin_driver_v2/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/chipone_tddi_v2/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/chipone_tddi_v3/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/chsc5xxx/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/ilitek_tddi_v3/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/focaltech_touch_V3_3/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/focaltech_touch_ufp/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/tlsc6x_v3/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/gcore_ts/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/gcore_ts_v3/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/betterlife_ts/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/sitronix_incell/Kconfig"
+source "drivers/vendor/common/touchscreen_v2/omnivision_tcm/Kconfig"
+
+config TOUCHSCREEN_BOARD_NAME
+	string "config board firmware folder"
+
+config TOUCHSCREEN_DRM_PANEL_NOTIFIER
+	bool "add qcom drm panel support"
+	default n
+	help
+	  Say Y here to enable debug tools.
+
+	  If unsure, say N.
+
+config TOUCHSCREEN_UFP_MAC
+	bool "tp under fingerprint status machine"
+	default n
+	help
+	  Say Y here if you want to have a under fingerprint status machine
+	  If unsure, say N.
+
+config TOUCHSCREEN_POINT_REPORT_CHECK
+	bool "all point clean when tp irq timeout"
+	default n
+	help
+	  Say Y here to enable .
+	  If unsure, say N.
+config TOUCHSCREEN_POINT_SIMULAT_UF
+ 	bool "tp under fingerprint status machine"
+ 	default n
+ 	help
+ 	  Say Y here if you want to simulate finger down
+ 	  If unsure, say N.
+config TOUCHSCREEN_LCD_NOTIFY
+ 	bool "lcd state notify"
+ 	default n
+	depends on ZTE_LCD_COMMON_FUNCTION
+ 	help
+ 	  Say Y here if you use lcd notify tp suspend/resume.If unsure, say N.
+

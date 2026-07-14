@@ -1,0 +1,5 @@
+config PLATFORM_FINGERPRINT_FPC1020
+	bool "FPC1020 Fingerprint"
+	default n
+	help
+	  Support FPC1020 capacitive fingerprint sensor device.

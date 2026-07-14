@@ -1,0 +1,10 @@
+#
+# FPC sensors
+#
+
+config PLATFORM_FINGERPRINT_FPC
+	bool "fpc fingerprint driver"
+	default n
+	help
+		If you say yes here you get IRQ support for fingerprint
+		sensors from Fingerprint Cards (FPC).

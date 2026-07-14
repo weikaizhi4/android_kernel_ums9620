@@ -1,0 +1,25 @@
+#
+# Iltek Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_ILITEK_TDDI_V3
+	bool "ilitek tddi 9881xk Touchscreen"
+	default n
+	help
+	Say Y here if you have ilitek touch panel.
+
+if TOUCHSCREEN_ILITEK_TDDI_V3
+config TOUCHSCREEN_ILITEK_TDDI_V3_I2C
+	bool "Ilitek I2C Touchscreen"
+	depends on I2C
+	default n
+	help
+	Say Y here if you have ilitek i2c touch panel.
+
+config TOUCHSCREEN_ILITEK_TDDI_V3_SPI
+	bool "Ilitek spi Touchscreen"
+	depends on SPI
+	default n
+	help
+	Say Y here if you have ilitek spi touch panel.
+endif

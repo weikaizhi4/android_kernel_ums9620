@@ -1,0 +1,36 @@
+#
+# Fingerprint driver configuration
+#
+
+config ZTE_PLATFORM_FINGERPRINT
+       tristate "ZTE Fingerprint"
+       default n
+       ---help---
+       ZTE Fingerprint Driver
+
+######### Goodix #########
+source "drivers/vendor/common/fingerprint/goodix/Kconfig"
+
+######### Silead #########
+source "drivers/vendor/common/fingerprint/silead/Kconfig"
+
+######### Cdfinger #########
+source "drivers/vendor/common/fingerprint/cdfinger/Kconfig"
+
+######### Chipone #########
+source "drivers/vendor/common/fingerprint/chipone/Kconfig"
+
+######### Sunwave #########
+source "drivers/vendor/common/fingerprint/sunwave/Kconfig"
+
+######### Egis #########
+source "drivers/vendor/common/fingerprint/egis/Kconfig"
+
+######### Fpc #########
+source "drivers/vendor/common/fingerprint/fpc/Kconfig"
+
+######### Fpc1020 #########
+source "drivers/vendor/common/fingerprint/fpc1020/Kconfig"
+
+######### focaltech #########
+source "drivers/vendor/common/fingerprint/focaltech/Kconfig"

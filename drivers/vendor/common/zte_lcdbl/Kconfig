@@ -1,0 +1,8 @@
+# LCD backlight power ctrl
+config ZTE_LCDBL_I2C_CTRL_VSP_VSN
+	tristate "ZTE LCD backlight power ctrl"
+
+        default n
+config ZTE_LCDBL_I2C_CTRL_VSP_VSN_ENHANCE
+        bool "Support for ZTE vsp vsn power enhance ctrl"
+        default n

@@ -1,0 +1,25 @@
+
+&dphy {
+	/delete-property/ sprd,ulps-disabled;
+};
+
+/*&i2c6 {
+	zte_lcdbl: ti65132b@3e {
+		compatible = "tps,ti65132b";
+		reg = <0x3e>;
+		zte,tps65132b_enhance_value = <0xffff>;
+	};
+};*/
+
+&panel {
+	/*sprd,surface-width = <720>;
+	sprd,surface-height = <1440>;*/
+	iovdd-gpio = <&ap_gpio 148 GPIO_ACTIVE_HIGH>;
+	avdd-gpio = <&ap_gpio 189 GPIO_ACTIVE_HIGH>;
+	avee-gpio = <&ap_gpio 190 GPIO_ACTIVE_HIGH>;
+	reset-gpio = <&ap_gpio 11 GPIO_ACTIVE_HIGH>;
+};
+
+&dptx {
+	status = "disable";
+};

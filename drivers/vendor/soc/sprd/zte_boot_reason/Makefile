@@ -1,0 +1,1 @@
+obj-$(CONFIG_ZTE_BOOTREASON) += zte_bootreason.o

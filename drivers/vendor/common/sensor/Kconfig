@@ -1,0 +1,18 @@
+config ZTE_TEMPERATURE_SENSOR
+	bool "ZTE_TEMPERATURE SENSOR"
+		depends on I2C
+		default n
+		help
+		  Say Y here if you have zte temperature sensor.
+		  If unsure, say N.
+
+config CUSTOM_KERNEL_SAR_SENSOR
+	bool "ZTE_SAR SENSOR"
+		depends on I2C
+		default n
+		help
+		  Say Y here if you have zte sar sensor.
+		  If unsure, say N.
+
+source "drivers/vendor/common/sensor/temperature/Kconfig"
+source "drivers/vendor/common/sensor/sar/Kconfig"

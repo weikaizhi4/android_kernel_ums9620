@@ -1,0 +1,10 @@
+#
+# sitronix Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_SITRONIX_INCELL
+    bool "sitronix Touchscreen"
+    default n
+    help
+      Say Y here if you have sitronix touch panel.
+      If unsure, say N.

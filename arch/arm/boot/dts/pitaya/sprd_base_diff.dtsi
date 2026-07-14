@@ -1,0 +1,23 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+
+#include "touchscreen_pitaya.dtsi"
+#include "zte_lcd.dtsi"
+#include "zte_fingerprint_pitaya.dtsi"
+#include "zte_charger_pitaya.dtsi"
+
+/{
+	zte_tp:zte_tp {
+		compatible = "zte_tp";
+		zte,tp_algo;
+		zte,tp_long_press;
+		zte,tp_long_press_timer = <800>;
+		zte,tp_long_press_left_v = <12>;
+		zte,tp_long_press_right_v = <12>;
+		zte,tp_long_press_left_h = <16>; /*camera */
+		zte,tp_long_press_right_h = <12>; /*charger */
+		zte,tp_edge_click_suppression_pixel = <2>;
+	};
+};

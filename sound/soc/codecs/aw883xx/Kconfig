@@ -1,0 +1,5 @@
+config ZTE_AW883XX_SMART_PA
+    tristate "SoC Audio for awinic aw883xx series"
+    depends on I2C
+    help
+      This option enables support for aw883xx series Smart PA.

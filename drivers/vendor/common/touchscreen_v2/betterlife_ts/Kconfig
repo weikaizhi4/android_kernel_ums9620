@@ -1,0 +1,15 @@
+#
+# betterlife Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_BETTERLIFE_TS
+    bool "betterlife tp"
+	default n
+	---help---
+	betterlife tp.
+
+config TOUCHSCREEN_BETTERLIFE_TS_FACTORY_TEST
+    bool "betterlife tp self test"
+    default n
+    depends on TOUCHSCREEN_BETTERLIFE_TS
+

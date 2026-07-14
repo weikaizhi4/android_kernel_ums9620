@@ -1,0 +1,11 @@
+/*
+ * this file is ued to change sprd dtsi which can't be changed by overlay
+ * such as /delete-node/ /delete-property/ and alises
+ */
+
+#include "touchscreen_tulip.dtsi"
+#include "zte_fingerprint_tulip.dtsi"
+#include "zte_camera_tulip.dtsi"
+#include "zte_charger_tulip.dtsi"
+#include "zte_leds_tulip.dtsi"
+#include "zte_sar_tulip.dtsi"

@@ -1,0 +1,28 @@
+&spi3 {
+	status = "ok";
+	#address-cells = <1>;
+	#size-cells = <0>;
+	zte-ts@0 {
+		compatible = "omnivision,tcm-spi", "chipone-tddi";
+		reg = <0>;
+		spi-max-frequency = <9600000>;
+		omnivision,irq-gpio = <&eic_async 16 0x2008>; /* IRQF_ONESHOT | IRQF_TRIGGER_LOW */
+ 		omnivision,irq-on-state = <0>;
+ 		omnivision,reset-gpio = <&ap_gpio 145 0x0000>;
+ 		omnivision,reset-on-state = <0>;
+ 		omnivision,reset-active-ms = <20>;
+ 		omnivision,reset-delay-ms = <200>;
+ 		omnivision,spi-mode = <3>;
+ 		omnivision,byte-delay-us = <0>;
+ 		omnivision,block-delay-us = <0>;
+ 		omnivision,ubl-max-freq = <3000000>;
+ 		omnivision,ubl-byte-delay-us = <20>;
+ 		omnivision,panel-max-x = <719>;
+ 		omnivision,panel-max-y = <1599>;
+
+		chipone,irq-gpio = <&eic_async 16 0x2008>; /* IRQF_ONESHOT | IRQF_TRIGGER_LOW */
+ 		chipone,rst-gpio = <&ap_gpio 145 0x0000>;
+ 		chipone,x-res = <719>;
+ 		chipone,y-res = <1599>;
+ 	};
+ };

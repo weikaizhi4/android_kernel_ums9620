@@ -1,0 +1,128 @@
+/ {
+	fragment {
+		target-path = "/";
+		__overlay__ {
+ lcds {
+	lcd_skyworth_st7701_ctc_6p26_480p: lcd_skyworth_st7701_ctc_6p26_480p{
+		zte,lcd-init-code-version = "20230216_v0";
+		zte,lcd-backlight-register-bit-length = <0x08>;
+		zte,lcm_backlight_curve_mode = "lcd_brightness_max_350_lux";
+		/*zte,lcd-disable-ssc;*/
+		zte,lcd-delay-open-bl-value = <60>;
+		zte,lcd-close-dynamic-dimming;
+		zte,panel-name = "lcd_skyworth_st7701_ctc_6p26_480p";
+
+
+		sprd,dsi-work-mode = <1>; /* video burst mode*/
+		sprd,dsi-lane-number = <2>;
+		sprd,dsi-color-format = "rgb888";
+
+		sprd,phy-bit-clock = <453000>;	/* kbps */
+		sprd,phy-escape-clock = <20000>;/* kHz */
+
+		sprd,width-mm = <68040>;
+		sprd,height-mm = <143730>;
+
+		sprd,esd-check-enable = <1>;/* 0:close , 1:open */
+		sprd,esd-check-mode = <1>;/* 0:REG ,1:TE  */
+		sprd,esd-check-period = <1000>;
+		sprd,esd-check-register = <0x0A>;
+		sprd,esd-check-value = <0x9C>;
+		sprd,reset-on-sequence = <1 5>, <0 5>, <1 120>;
+		sprd,reset-off-sequence = <0 0>, <0 0>, <0 120>;
+
+		sprd,initial-command = [
+39 00 00 06 FF 77 01 00 00 13
+39 00 00 02 EF 08
+39 00 00 06 FF 77 01 00 00 10
+39 00 00 03 C0 FD 03
+39 00 00 03 C1 08 08
+39 00 00 03 C2 07 00
+39 00 00 02 CC 30
+39 00 00 02 C6 21
+39 00 00 11 B0 00 08 0E 0D 10 06 00 08 07 1E 05 13 11 28 2F 1D
+39 00 00 11 B1 00 08 0F 0D 11 06 00 08 08 1D 06 15 12 27 2E 1D
+39 00 00 06 FF 77 01 00 00 11
+39 00 00 02 B0 96/*VOP=5.4125v*/
+
+39 00 00 02 B2 87/*VGH=15V*/
+39 00 00 02 B3 80
+39 00 00 02 B5 4C/*VGL=-11.3V*/
+39 00 00 02 B7 8F
+39 00 00 02 B8 22
+39 00 00 02 B9 10
+39 00 00 02 C0 8A
+39 00 00 02 C1 08
+39 00 00 02 C2 78
+39 00 00 02 D0 88
+
+39 00 00 04 E0 00 00 02
+39 00 00 0C E1 03 A0 00 00 02 A0 00 00 00 20 20
+39 00 00 0E E2 40 40 20 20 01 00 00 00 00 00 00 00 EE
+39 00 00 05 E3 00 00 44 44
+39 00 00 03 E4 44 44
+39 00 00 11 E5 05 00 90 90 07 02 90 90 09 04 90 90 0B 06 90 90
+39 00 00 05 E6 00 00 34 44
+39 00 00 03 E7 44 44
+39 00 00 11 E8 04 FF 90 90 06 01 90 90 08 03 90 90 0A 05 90 90
+39 00 00 08 EB 00 02 E4 E4 88 00 00
+39 00 00 03 EC 00 00
+39 00 00 11 ED 2F 0A B4 56 7F FF FF FF FF FF FF F7 65 4B A0 F2
+39 00 00 06 FF 77 01 00 00 13
+39 00 00 03 E8 00 0E
+39 00 00 06 FF 77 01 00 00 00
+05 78 00 01 11 /*delay 120ms*/
+39 00 00 06 FF 77 01 00 00 13
+39 0A 00 03 E8 00 0C
+
+39 00 00 03 E8 00 00
+39 00 00 06 FF 77 01 00 00 00
+39 00 00 02 36 00/*00 FW;10 BW*/
+39 00 00 02 35 00
+39 01 00 06 FF 77 01 00 00 10
+39 01 00 02 BB 00
+39 01 00 02 CD 00
+39 01 00 02 CA 11
+39 01 00 02 BC 01
+39 00 00 06 FF 77 01 00 00 00
+39 00 00 02 51 00/*zuiliang,yuanlaishi 00*/
+39 00 00 02 53 0C
+39 00 00 02 55 00
+39 00 00 02 5e 03/*yishang 4 hang*/		
+05 20 00 01 29
+			];
+			
+		sprd,sleep-in-command = [
+	05 78 00 01 28
+	05 78 00 01 10
+
+			];
+		sprd,sleep-out-command = [
+05 78 00 01 11 /*delay 120ms*/
+05 00 00 01 29
+			];
+
+		display-timings {
+			lcd_skyworth_st7701_ctc_6p26_480p_timing0: timing0 {
+			clock-frequency = <32000000>;
+			hactive = <480>;
+			vactive = <1014>;
+			hback-porch = <8>;
+			hfront-porch = <8>;
+			vback-porch = <26>;
+			vfront-porch = <16>;
+			hsync-len = <2>;
+			vsync-len = <8>;
+			};
+		};
+		oled-backlight {
+			default-brightness-level = <102>;
+			sprd,max-level = <255>;
+			brightness-levels = [
+				23 00 00 02 51 00
+				/*23 00 00 02 53 0C*/
+			];
+		};
+	};
+};};
+};};
