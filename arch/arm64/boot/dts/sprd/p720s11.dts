@@ -1,0 +1,12 @@
+// SPDX-License-Identifier: GPL-2.0-only
+/*
+ * ZTE P720S11 board DTS.
+ *
+ * The P720S11 board shares the UMS9620 staple hardware description.  Keep
+ * common platform and peripheral definitions in their existing DTSI files.
+ */
+
+/dts-v1/;
+
+#include "staple/ums9620.dts"
+#include "p720s11.dtsi"

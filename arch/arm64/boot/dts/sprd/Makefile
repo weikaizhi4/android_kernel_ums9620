@@ -74,7 +74,8 @@ dtb-$(CONFIG_ARCH_SPRD) += \
 	ums512.dtb \
 	ums312.dtb \
 	ums9230.dtb \
-	ums9620.dtb
+	ums9620.dtb \
+	p720s11.dtb
 
 dtbo-$(CONFIG_ARCH_SPRD) += \
 	sp9863a-1h10-overlay.dtbo \
