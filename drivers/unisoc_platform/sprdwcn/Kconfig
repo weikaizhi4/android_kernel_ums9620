@@ -8,6 +8,13 @@ config UNISOC_WCN_BSP
 	  This is support wcn chip for Unisoc.
 	  if you want to use 23xx series wcn chip of Unisoc.
 	  please say "y".
+
+config SPRD_WCN_BT_TTY
+	tristate "Unisoc WCN SIPC Bluetooth TTY"
+	depends on UNISOC_WCN_BSP && TTY && RFKILL
+	help
+	  Create the ttyBT transport used by the Android Bluetooth HAL for
+	  integrated Unisoc WCN chips connected through SIPC.
 config SC23XX
 	bool "SC23XX chip Support"
 	#depends on MMC

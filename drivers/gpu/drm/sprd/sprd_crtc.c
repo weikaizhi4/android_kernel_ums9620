@@ -7,6 +7,7 @@
 #include <linux/sprd_iommu.h>
 
 #include <drm/drm_atomic_helper.h>
+#include <drm/drm_color_mgmt.h>
 #include <drm/drm_crtc_helper.h>
 #include <drm/drm_gem_framebuffer_helper.h>
 #include <drm/drm_plane_helper.h>
@@ -424,6 +425,13 @@ struct sprd_crtc *sprd_crtc_init(struct drm_device *drm,
 	}
 
 	drm_crtc_helper_add(&crtc->base, &sprd_crtc_helper_funcs);
+
+	/*
+	 * The vendor HWC uses the standard atomic CTM property for display
+	 * enhancement.  The DPU does not program a CTM itself, but exposing the
+	 * property preserves the DRM userspace ABI expected by that HWC.
+	 */
+	drm_crtc_enable_color_mgmt(&crtc->base, 0, true, 0);
 
 	sprd_crtc_create_properties(crtc, version, corner_size);
 

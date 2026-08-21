@@ -6,7 +6,13 @@
 #ifdef ST_DO_WRITE_DISPLAY_AREA
 #define ST_DUMP_MAX_LEN	0x20000
 #else
-#define ST_DUMP_MAX_LEN	0x11000
+/*
+ * ST7123 host-download images contain 64 KiB of PRAM firmware followed by
+ * a 12 KiB CFT1 configuration area.  The previous 0x11000 limit describes
+ * neither image and lets a valid 0x13000 vendor image be parsed out of
+ * bounds.
+ */
+#define ST_DUMP_MAX_LEN	0x13000
 #endif
 
 

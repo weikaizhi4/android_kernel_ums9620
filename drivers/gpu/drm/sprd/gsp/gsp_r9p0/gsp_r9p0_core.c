@@ -1281,7 +1281,8 @@ static void gsp_r9p0_hdr10_set(void __iomem *base, struct gsp_r9p0_cfg *cfg, int
 
 	for (i = 0; i < HDR_REGAMMA_LUT_SIZE; ++i) {
 		gsp_core_reg_write(R9P0_HDR36_CFG(base, icnt), i);
-		gsp_core_reg_write(R9P0_HDR11_CFG(base, icnt), para->hdr_regamma_lut_table[i]);
+		/* The UAPI supplies the regamma LUT data register value, not a LUT array. */
+		gsp_core_reg_write(R9P0_HDR11_CFG(base, icnt), para->reg_hdr_rgmlut_data);
 	}
 
 	gsp_core_reg_write(R9P0_HDR26_CFG(base, icnt), HDR_DR_LUT_WRITE_FINISH);
@@ -2361,4 +2362,3 @@ void gsp_r9p0_core_reset(struct gsp_core *core)
 {
 
 }
-

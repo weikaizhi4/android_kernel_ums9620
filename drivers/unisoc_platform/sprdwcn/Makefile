@@ -23,6 +23,7 @@ endif
 
 #WCN MODULE
 obj-$(CONFIG_UNISOC_WCN_BSP) += wcn_bsp.o
+obj-$(CONFIG_SPRD_WCN_BT_TTY) += bluetooth/
 wcn_bsp-y += wcn_bus.o
 wcn_bsp-y += sprd_wcn.o
 

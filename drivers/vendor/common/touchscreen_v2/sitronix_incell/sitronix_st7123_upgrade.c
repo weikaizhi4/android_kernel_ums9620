@@ -31,12 +31,14 @@ int st_check_display(const char *data)
 
 int st_check_cfg(const char *data, int *cfgSize)
 {
-	if (data[0x00] != 'C' || data[0x01] != 'F' || data[0x02] != 'T' || data[0x03] != '1') {
-		sterr("check CFT1 fail , %x %x %x %x\n", data[0x00], data[0x01], data[0x02], data[0x03]);
+	const u8 *cfg = (const u8 *)data;
+
+	if (cfg[0x00] != 'C' || cfg[0x01] != 'F' || cfg[0x02] != 'T' || cfg[0x03] != '1') {
+		sterr("check CFT1 fail , %x %x %x %x\n", cfg[0x00], cfg[0x01], cfg[0x02], cfg[0x03]);
 		return -EINVAL;
 	}
 
-	*cfgSize = data[0x0a] * 0x100 + data[0x0B] + 3;
+	*cfgSize = cfg[0x0a] * 0x100 + cfg[0x0B] + 3;
 	stmsg("cfgSize = 0x%X\n", *cfgSize);
 
 	return 0;
@@ -85,24 +87,25 @@ void st_calculateFwChecksum(st_u32 *pChecksum, unsigned char *pInData, unsigned 
 
 int st_check_fw(const char *data, int *fwOff, int *fwSize, int *fwInfoOff, int *cfgFlashOff, int *cfgDramOff)
 {
+	const u8 *fw = (const u8 *)data;
 	int i = 0;
 	int fwCrcOff = 0;
 	st_u32 checksum = 0, checksumFw = 0;
 	*fwOff = 0;
-	*fwSize = data[0x84] * 0x100 + data[0x85]+1;
+	*fwSize = fw[0x84] * 0x100 + fw[0x85] + 1;
 	*cfgFlashOff =  0x10000; /* data[0x8E] * 0x10000 + data[0x8F] * 0x100 + data[0x90]; */
-	*cfgDramOff = data[0x91] * 0x100 + data[0x92];
-	*fwInfoOff = data[0x93] * 0x100 + data[0x94];
-	fwCrcOff = data[0x84] * 0x100 + data[0x85];
+	*cfgDramOff = fw[0x91] * 0x100 + fw[0x92];
+	*fwInfoOff = fw[0x93] * 0x100 + fw[0x94];
+	fwCrcOff = fw[0x84] * 0x100 + fw[0x85];
 
-	if (fwCrcOff > ST_DUMP_MAX_LEN) {
-		sterr("fwCrcOff(0x%X) > ST_DUMP_MAX_LEN(0x%X) , error!\n", fwCrcOff, ST_DUMP_MAX_LEN);
+	if (fwCrcOff < 2 || fwCrcOff >= ST_FW_LEN) {
+		sterr("fwCrcOff(0x%X) is outside firmware range(0x%X), error!\n", fwCrcOff, ST_FW_LEN);
 		return -EINVAL;
 	}
 
-	checksumFw =data[fwCrcOff] | // CRC 24 low byte
-	(data[fwCrcOff - 1] << 8) |  // CRC 24 middle byte
-	(data[fwCrcOff - 2] << 16);  // CRC 24 high byte
+	checksumFw = fw[fwCrcOff] | // CRC 24 low byte
+	(fw[fwCrcOff - 1] << 8) |  // CRC 24 middle byte
+	(fw[fwCrcOff - 2] << 16);  // CRC 24 high byte
 
 	st_calculateFwChecksum(&checksum, (unsigned char*)data, fwCrcOff-2);
 	if (checksumFw != checksum) {
@@ -111,14 +114,14 @@ int st_check_fw(const char *data, int *fwOff, int *fwSize, int *fwInfoOff, int *
 	}
 
 	i = *fwInfoOff;
-	if (i > ST_DUMP_MAX_LEN) {
-		sterr("fwInfoOff(0x%X) > ST_DUMP_MAX_LEN(0x%X) , error!\n", i, ST_DUMP_MAX_LEN);
+	if (i < 0 || i > fwCrcOff - 6) {
+		sterr("fwInfoOff(0x%X) is outside firmware range, error!\n", i);
 		return -EINVAL;
 	}
-	if (data[i]   == 0x54 &&
-		data[i+1] == 0x46 &&
-		data[i+2] == 0x49 &&
-		data[i+3] == 0x33) {
+	if (fw[i]   == 0x54 &&
+		fw[i+1] == 0x46 &&
+		fw[i+2] == 0x49 &&
+		fw[i+3] == 0x33) {
 		stmsg("TOUCH_FW_INFO offset = 0x%X\n", i+4);
 		*fwInfoOff = i+4;
 
@@ -826,6 +829,12 @@ int sitronix_spi_hdl_fw(unsigned char *buf)
 		sterr("st_check_cfg fail\n");
 		goto sitronix_spi_hdl_fw_finish;
 	}
+	if (cfgFlashOff < 0 || cfgSize < 3 || cfgFlashOff > ST_DUMP_MAX_LEN - cfgSize) {
+		strlcpy(gts->upgrade_msg, "firmware config out of range", sizeof(gts->upgrade_msg));
+		sterr("cfg offset 0x%X size 0x%X exceeds dump size 0x%X\n",
+		      cfgFlashOff, cfgSize, ST_DUMP_MAX_LEN);
+		goto sitronix_spi_hdl_fw_finish;
+	}
 #ifdef ST_DO_WRITE_DISPLAY_AREA
 	displaySize = ST_DISPLAY_SIZE;
 	ret = st_check_display(buf + ST_DISPLAY_DUMP_OFF);
@@ -1177,4 +1186,3 @@ void sitronix_replace_dump_buf(unsigned char *id)
 
 #endif	/* ST_REPLACE_DUMP_BY_DISPLAY_ID */
 }
-

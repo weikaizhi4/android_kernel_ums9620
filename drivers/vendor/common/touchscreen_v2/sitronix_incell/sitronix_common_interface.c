@@ -35,6 +35,19 @@ int sitronix_get_fw(void)
 	int i = 0;
 	int ret = 0;
 
+	/*
+	 * The Huaying ST7123 panel reports the same controller vendor ID as the
+	 * YKL panel.  Its vendor image is a newer TDP1 container, while this
+	 * driver implements the CFT1 host-download protocol used by the YKL
+	 * image.  Select that compatible image while retaining panel detection.
+	 */
+	if (strnstr(lcd_name, "huaying", strlen(lcd_name))) {
+		sitronix_vendor_id = STP_VENDOR_ID_0;
+		strlcpy(sitronix_vendor_name, STP_VENDOR_0_NAME,
+			sizeof(sitronix_vendor_name));
+		goto out;
+	}
+
 	for (i = 0; i < ARRAY_SIZE(sitronix_vendor_l); i++) {
 		if (strnstr(lcd_name, sitronix_vendor_l[i].vendor_name, strlen(lcd_name))) {
 			sitronix_vendor_id = sitronix_vendor_l[i].vendor_id;
@@ -271,5 +284,3 @@ int sitronix_register_fw_class(void)
 #endif
 	return 0;
 }
-
-

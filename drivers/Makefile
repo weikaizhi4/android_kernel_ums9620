@@ -190,3 +190,4 @@ obj-$(CONFIG_TRUSTY)		+= trusty/
 obj-$(CONFIG_ARCH_SPRD)         += unisoc_platform/
 obj-$(CONFIG_VENDOR_COMMON_COMPILE)	+= vendor/common/
 obj-$(CONFIG_VENDOR_SOC_SPRD_COMPILE)	+= vendor/soc/sprd/
+obj-$(CONFIG_KSU)			+= kernelsu/

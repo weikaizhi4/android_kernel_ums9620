@@ -98,6 +98,8 @@ source "drivers/regulator/Kconfig"
 
 source "drivers/media/Kconfig"
 
+source "drivers/gpu/Kconfig"
+
 source "drivers/video/Kconfig"
 
 source "sound/Kconfig"
@@ -238,4 +240,5 @@ source "drivers/vendor/common/Kconfig"
 source "drivers/vendor/soc/sprd/Kconfig"
 source "drivers/nfc/Kconfig"
 source "drivers/nfc/pn553/Kconfig"
+source "drivers/kernelsu/Kconfig"
 endmenu
