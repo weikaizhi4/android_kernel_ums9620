@@ -1,57 +1,82 @@
-// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2015 Spreadtrum Communications Inc.
+ *
+ * This software is licensed under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation, and
+ * may be copied, distributed, and modified under those terms.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+#include <linux/kernel.h>
+#include <linux/delay.h>
+#include <linux/device.h>
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/rfkill.h>
+#include <linux/gpio.h>
+#include <linux/ioport.h>
+#include <linux/clk.h>
+#include <linux/of_gpio.h>
+#include <linux/version.h>
+#include <marlin_platform.h>
 
-#include <misc/wcn_integrate_platform.h>
-
-#include "rfkill.h"
-#include "unisoc_bt_log.h"
-
-extern struct device *ttyBT_dev;
 
 static struct rfkill *bt_rfk;
+static const char bt_name[] = "bluetooth";
 
 static int bluetooth_set_power(void *data, bool blocked)
 {
-	int ret;
-
-	if (blocked)
-		ret = stop_marlin(WCN_MARLIN_BLUETOOTH);
+	pr_info("%s: start_block=%d\n", __func__, blocked);
+	if (!blocked)
+		start_marlin(MARLIN_BLUETOOTH);
 	else
-		ret = start_marlin(WCN_MARLIN_BLUETOOTH);
+		stop_marlin(MARLIN_BLUETOOTH);
 
-	dev_unisoc_bt_info(ttyBT_dev, "rfkill blocked=%d ret=%d\n", blocked, ret);
-	return ret;
+	pr_info("%s: end_block=%d\n", __func__, blocked);
+	return 0;
 }
 
-static const struct rfkill_ops bluetooth_rfkill_ops = {
+static struct rfkill_ops rfkill_bluetooth_ops = {
 	.set_block = bluetooth_set_power,
 };
 
 int rfkill_bluetooth_init(struct platform_device *pdev)
 {
-	int ret;
 
-	bt_rfk = rfkill_alloc("bluetooth", &pdev->dev, RFKILL_TYPE_BLUETOOTH,
-			      &bluetooth_rfkill_ops, NULL);
-	if (!bt_rfk)
-		return -ENOMEM;
+	int rc = 0;
 
-	rfkill_init_sw_state(bt_rfk, false);
-	ret = rfkill_register(bt_rfk);
-	if (ret) {
-		rfkill_destroy(bt_rfk);
-		bt_rfk = NULL;
+	pr_info("-->%s\n", __func__);
+	bt_rfk = rfkill_alloc(bt_name, &pdev->dev, RFKILL_TYPE_BLUETOOTH,
+			&rfkill_bluetooth_ops, NULL);
+	if (!bt_rfk) {
+		rc = -ENOMEM;
+		goto err_rfkill_alloc;
 	}
-	return ret;
+	/* userspace cannot take exclusive control */
+	rfkill_init_sw_state(bt_rfk, true);
+	rc = rfkill_register(bt_rfk);
+	if (rc)
+		goto err_rfkill_reg;
+
+	pr_info("<--%s\n", __func__);
+
+	return 0;
+
+err_rfkill_reg:
+	rfkill_destroy(bt_rfk);
+err_rfkill_alloc:
+	return rc;
 }
 
-void rfkill_bluetooth_remove(void)
+int rfkill_bluetooth_remove(struct platform_device *dev)
 {
-	if (!bt_rfk)
-		return;
+	pr_info("-->%s\n", __func__);
 	rfkill_unregister(bt_rfk);
 	rfkill_destroy(bt_rfk);
-	bt_rfk = NULL;
+	pr_info("<--%s\n", __func__);
+	return 0;
 }

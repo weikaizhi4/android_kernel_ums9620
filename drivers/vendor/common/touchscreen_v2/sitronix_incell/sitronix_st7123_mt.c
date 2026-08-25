@@ -6,6 +6,20 @@ static atomic_t iMonitorThreadPostpone = ATOMIC_INIT(0);
 static uint8_t PreCheckData[4];
 static int StatusCheckCount;
 static int DisCheckCount;
+/*
+ * A no-flash ST7123 needs time to settle after resume.  Do not let the
+ * monitor inspect stale sensing counters while the panel and SPI bus are
+ * coming back up.
+ */
+static unsigned int ResumeCheckSkipCount;
+
+static void sitronix_mt_reset_check_state(void)
+{
+	memset(PreCheckData, 0, sizeof(PreCheckData));
+	StatusCheckCount = 0;
+	DisCheckCount = 0;
+	i2cErrorCount = 0;
+}
 
 int sitroinx_ts_check_display_off(void)
 {
@@ -141,6 +155,10 @@ int sitronix_ts_monitor_thread_v3(void *data)
 			stdbg("MT paused\n");
 		} else if (atomic_read(&iMonitorThreadPostpone)) {
 			atomic_set(&iMonitorThreadPostpone, 0);
+			mt_peroid = DELAY_MONITOR_THREAD_PEROID_NORMAL;
+		} else if (ResumeCheckSkipCount) {
+			ResumeCheckSkipCount--;
+			mt_peroid = DELAY_MONITOR_THREAD_PEROID_NORMAL;
 		} else {
 			mutex_lock(&gts->mutex);
 			ret = sitronix_ts_reg_read(gts, FIRMWARE_VERSION, buf, 12);
@@ -178,11 +196,16 @@ int sitronix_ts_monitor_thread_v3(void *data)
 				PreCheckData[0] = buf[0xA];
 				PreCheckData[1] = buf[0xB];
 
-				if (3 <= StatusCheckCount) {
-					sterr("IC Status doesn't update!\n");
-					result = -1;
+				/*
+				 * The sensing counter can legitimately remain unchanged while
+				 * the panel is idle.  With SITRONIX_HDL_IN_MT this used to
+				 * trigger a complete host firmware download, which races the
+				 * first display-on after suspend.  A readable firmware register
+				 * is enough to prove the controller is alive; keep recovery for
+				 * real transfer failures and bootcode status below.
+				 */
+				if (3 <= StatusCheckCount)
 					StatusCheckCount = 0;
-				}
 			}
 #ifdef SITRONIX_MT_CHECK_DIS
 			if (disbuf[0] == 0x93) {
@@ -273,10 +296,15 @@ void sitronix_mt_restore(void)
 void sitronix_mt_suspend(void)
 {
 	gts->is_suspend_mt = 1;
+	sitronix_mt_reset_check_state();
+	ResumeCheckSkipCount = 0;
 }
 
 void sitronix_mt_resume(void)
 {
+	sitronix_mt_reset_check_state();
+	/* One postponed pass plus three normal periods gives the IC 8 seconds. */
+	ResumeCheckSkipCount = 3;
 	sitronix_mt_pause_one();
 	gts->is_suspend_mt = 0;
 }
@@ -299,9 +327,7 @@ void sitronix_mt_start(int startDelayMS)
 	if (gts->enable_monitor_thread == 1) {
 		/* atomic_set(&ts_data->iMonitorThreadPostpone, 1); */
 		sitronix_mt_pause_one();
-		StatusCheckCount = 0;
-		i2cErrorCount = 0;
-		DisCheckCount = 0;
+		sitronix_mt_reset_check_state();
 		gts->sitronix_ts_delay_monitor_thread_start = startDelayMS;
 		if (!gts->SitronixMonitorThread)
 			gts->SitronixMonitorThread = kthread_run(gts->sitronix_mt_fp, gts, "Sitronix Monitor Thread");

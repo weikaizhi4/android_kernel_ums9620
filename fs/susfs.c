@@ -1279,7 +1279,15 @@ out_copy_to_user:
 /* kthread for checking if /sdcard/Android is accessible via fsnoitfy */
 /* code is straightly borrowed from KernelSU's pkg_observer.c */
 #define SDCARD_ANDROID_PATH "/data/media/0/Android"
-DEFINE_STATIC_KEY_TRUE(susfs_is_sdcard_android_data_not_decrypted);
+/*
+ * This tree uses the key from the execve hook even when SUS_MOUNT is off.
+ * Starting it enabled makes every early Android process take the KSU exec
+ * path until userspace sends EVENT_BOOT_COMPLETED, which is circular for
+ * devices whose storage stack has not yet mounted emulated storage.  Keep
+ * the normal path by default; SUS_MOUNT users do not need this key here
+ * because the option is disabled in this product configuration.
+ */
+DEFINE_STATIC_KEY_FALSE(susfs_is_sdcard_android_data_not_decrypted);
 
 struct watch_dir {
 	const char *path;
@@ -1488,4 +1496,3 @@ void susfs_init(void) {\
 
 /* No module exit is needed becuase it should never be a loadable kernel module */
 //void __init susfs_exit(void)
-

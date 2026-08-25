@@ -265,7 +265,7 @@ module_param_call(battery_module_pack_vendor, NULL,
 
 enum charger_types_oem charge_type_oem = CHARGER_TYPE_DEFAULT;
 
-#if defined(CONFIG_VENDOR_ZTE_MISC_COMMON)
+#if defined(CONFIG_VENDOR_ZTE_MISC) || defined(CONFIG_VENDOR_ZTE_MISC_COMMON)
 EXPORT_SYMBOL(charge_type_oem);
 #endif
 
