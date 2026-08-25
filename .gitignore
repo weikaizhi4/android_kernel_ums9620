@@ -150,14 +150,3 @@ x509.genkey
 # zte kernel
 include/vendor
 drivers/vendor
-
-# Local kernel build products and workspace helpers.
-*.dtbo
-*.symversions
-/out/
-/scripts/module-lto.lds
-/adb-display-diagnostic.txt
-/adb_display_diag.sh
-/build_kernel.sh
-/p720s11_orig_config
-/source
