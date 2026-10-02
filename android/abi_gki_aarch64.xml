@@ -420,6 +420,7 @@
       <elf-symbol name='blk_mq_map_queues' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x4d4d7b79'/>
       <elf-symbol name='blk_mq_pci_map_queues' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x7f2060e'/>
       <elf-symbol name='blk_mq_quiesce_queue' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x33e7cf68'/>
+      <elf-symbol name='blk_mq_quiesce_queue_nowait' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x51d6dbe5'/>
       <elf-symbol name='blk_mq_request_completed' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x9c2e81ba'/>
       <elf-symbol name='blk_mq_requeue_request' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0x6b8a1abb'/>
       <elf-symbol name='blk_mq_run_hw_queues' type='func-type' binding='global-binding' visibility='default-visibility' is-defined='yes' crc='0xb0523d25'/>
