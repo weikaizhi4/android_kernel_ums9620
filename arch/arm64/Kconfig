@@ -133,7 +133,11 @@ config ARM64
 	select HAVE_ARCH_KGDB
 	select HAVE_ARCH_MMAP_RND_BITS
 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
-	select HAVE_ARCH_PREL32_RELOCATIONS if !LTO_CLANG
+	# DSH: keep the classic (pointer based) struct kernel_symbol layout so that
+	# the prebuilt vendor modules, which the stock kernel built with LTO_CLANG=y,
+	# are parsed correctly.  With PREL32 enabled the kernel reads 12-byte
+	# entries and over-reads their 24-byte __ksymtab, registering bogus empty
+	# symbol names and rejecting every module that exports symbols.
 	select HAVE_ARCH_SECCOMP_FILTER
 	select HAVE_ARCH_STACKLEAK
 	select HAVE_ARCH_THREAD_STRUCT_WHITELIST

@@ -908,11 +908,9 @@ KBUILD_LDFLAGS_MODULE += $(LD_FLAGS_LTO_CLANG)
 
 KBUILD_LDS_MODULE += scripts/module-lto.lds
 
-# Check for frame size exceeding threshold during prolog/epilog insertion.
-ifneq ($(CONFIG_FRAME_WARN),0)
-KBUILD_LDFLAGS	+= -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
-KBUILD_LDFLAGS	+= -fatal-warnings
-endif
+# DSH: LLVM 21's ld.lld no longer accepts -plugin-opt=-warn-stack-size and the
+# adjacent -fatal-warnings turns that unknown option into a hard error.  Both
+# only add a diagnostic during the LTO link, so they are dropped.
 endif
 
 ifdef CONFIG_LTO
