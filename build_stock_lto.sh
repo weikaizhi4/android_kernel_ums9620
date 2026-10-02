@@ -39,6 +39,12 @@ scripts/config --file "$CFG" \
   -e KSU -d KSU_SUSFS -e KSU_MANUAL_HOOK -d KSU_TRACEPOINT_HOOK \
   -d WERROR
 for s in $(grep -oE '^CONFIG_KSU_SUSFS[A-Z0-9_]*' "$CFG"); do scripts/config --file "$CFG" -d "${s#CONFIG_}"; done
+# 固定构建元数据，使产物与设备上已刷入的内核一致（构建号 + 时间 + 用户/主机）
+export KBUILD_BUILD_USER=${KBUILD_BUILD_USER:-twodays}
+export KBUILD_BUILD_HOST=${KBUILD_BUILD_HOST:-twodays-Workstation}
+export KBUILD_BUILD_TIMESTAMP=${KBUILD_BUILD_TIMESTAMP:-"Fri Oct 2 14:55:29 CST 2026"}
+[ -f "$OUT/.version" ] || echo 2 > "$OUT/.version"
+
 MAKE_ARGS=(O="$OUT" ARCH=arm64 LLVM=1 LLVM_IAS=1 CROSS_COMPILE=aarch64-linux-gnu- LOCALVERSION=
            KCFLAGS="-Wno-error=enum-compare -Wno-error=compare-distinct-pointer-types -Wno-error=strict-prototypes")
 make "${MAKE_ARGS[@]}" olddefconfig
