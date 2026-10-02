@@ -47,12 +47,19 @@ unsigned long zs_malloc(struct zs_pool *pool, size_t size, gfp_t flags);
 void zs_free(struct zs_pool *pool, unsigned long obj);
 
 size_t zs_huge_class_size(struct zs_pool *pool);
+unsigned int zs_lookup_class_index(struct zs_pool *pool, unsigned int size);
 
 void *zs_map_object(struct zs_pool *pool, unsigned long handle,
 			enum zs_mapmode mm);
 void zs_unmap_object(struct zs_pool *pool, unsigned long handle);
 
 unsigned long zs_get_total_pages(struct zs_pool *pool);
+void *zs_obj_read_begin(struct zs_pool *pool, unsigned long handle,
+			size_t mem_len, void *local_copy);
+void zs_obj_read_end(struct zs_pool *pool, unsigned long handle,
+		     size_t mem_len, void *handle_mem);
+void zs_obj_write(struct zs_pool *pool, unsigned long handle,
+		  void *handle_mem, size_t mem_len);
 unsigned long zs_compact(struct zs_pool *pool);
 
 void zs_pool_stats(struct zs_pool *pool, struct zs_pool_stats *stats);
