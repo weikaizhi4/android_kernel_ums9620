@@ -454,7 +454,7 @@ void put_task_stack(struct task_struct *tsk)
 void free_task(struct task_struct *tsk)
 {
 #ifdef CONFIG_SECCOMP
-       WARN_ON_ONCE(tsk->seccomp.filter);
+	WARN_ON_ONCE(tsk->seccomp.filter);
 #endif
 	cpufreq_task_times_exit(tsk);
 	scs_release(tsk);
