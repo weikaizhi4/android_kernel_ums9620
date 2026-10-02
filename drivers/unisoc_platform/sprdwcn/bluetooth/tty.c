@@ -655,6 +655,21 @@ static int  mtty_probe(struct platform_device *pdev)
 	}
 #endif
 
+	/*
+	 * The BT tty is a singleton: its tty_driver is registered with the fixed
+	 * name "ttyBT".  If the platform device is created a second time (e.g.
+	 * by a repeated WCN subsystem init) a second tty_register_driver() would
+	 * fail with -EEXIST, and the error path below used to call
+	 * tty_unregister_driver() on a driver that was never registered, which
+	 * corrupted the tty driver list and caused a kernel BUG.  Only bring the
+	 * tty up once and ignore duplicate probes.
+	 */
+	if (mtty_dev) {
+		pr_info("%s: ttyBT already registered, skipping duplicate probe\n",
+				__func__);
+		return 0;
+	}
+
 	mtty = kzalloc(sizeof(struct mtty_device), GFP_KERNEL);
 	if (mtty == NULL) {
 		mtty_destroy_pdata(&pdata);
@@ -665,7 +680,12 @@ static int  mtty_probe(struct platform_device *pdev)
 	mtty->pdata = pdata;
 	rval = mtty_tty_driver_init(mtty);
 	if (rval) {
-		mtty_tty_driver_exit(mtty);
+		/*
+		 * mtty_tty_driver_init() already released the tty_driver and the
+		 * port on failure.  Calling mtty_tty_driver_exit() here would run
+		 * tty_unregister_driver() on a driver that was never registered
+		 * and corrupt the tty driver list.
+		 */
 		kfree(mtty->port);
 		kfree(mtty);
 		mtty_destroy_pdata(&pdata);

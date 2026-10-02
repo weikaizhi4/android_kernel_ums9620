@@ -2964,11 +2964,28 @@ EXPORT_SYMBOL_GPL(stop_marlin);
 static void marlin_subsys_init(void)
 {
 	int ret;
+	static bool subsys_populated;
+
+	/*
+	 * marlin_power_wq() runs on every WCN power-on cycle, but nothing ever
+	 * removes the child platform devices again (there is no
+	 * of_platform_depopulate() in this driver), so calling
+	 * devm_of_platform_populate() a second time only creates duplicate
+	 * devices.  The duplicated BT tty device made mtty_probe() register
+	 * "ttyBT" twice, which failed with -EEXIST and then corrupted the tty
+	 * driver list (kernel BUG at lib/list_debug.c:47).  Populate the WCN
+	 * sub-devices exactly once.
+	 */
+	if (subsys_populated)
+		return;
 
 	pr_info("%s start\n", __func__);
 	ret = devm_of_platform_populate(marlin_dev->dev);
-	if (ret)
+	if (ret) {
 		pr_err("init subsys WFBT error\n");
+		return;
+	}
+	subsys_populated = true;
 }
 
 static void marlin_power_wq(struct work_struct *work)
