@@ -9,6 +9,7 @@
 #include <linux/ptrace.h>
 #include <linux/slab.h>
 #include <linux/pagemap.h>
+#include <linux/pgsize_migration.h>
 #include <linux/mempolicy.h>
 #include <linux/rmap.h>
 #include <linux/swap.h>
@@ -472,7 +473,14 @@ done:
 
 static int show_map(struct seq_file *m, void *v)
 {
-	show_map_vma(m, v);
+	struct vm_area_struct *pad_vma = get_pad_vma(v);
+	struct vm_area_struct *vma = get_data_vma(v);
+
+	if (vma_pages(vma))
+		show_map_vma(m, vma);
+
+	show_map_pad_vma(vma, pad_vma, m, show_map_vma, false);
+
 	m_cache_vma(m, v);
 	return 0;
 }
@@ -1032,7 +1040,7 @@ static void __show_smap(struct seq_file *m, const struct mem_size_stats *mss,
 	seq_puts(m, " kB\n");
 }
 
-static int show_smap(struct seq_file *m, void *v)
+static void show_smap_vma(struct seq_file *m, void *v)
 {
 	struct vm_area_struct *vma = v;
 	struct mem_size_stats mss;
@@ -1043,7 +1051,7 @@ static int show_smap(struct seq_file *m, void *v)
 
 #ifdef CONFIG_KSU_SUSFS_SUS_MAP
 	if (vma->vm_file && SUSFS_IS_INODE_SUS_MAP(file_inode(vma->vm_file)))
-		return 0;
+		return;
 #endif
 	memset(&mss, 0, sizeof(mss));
 
@@ -1089,9 +1097,19 @@ static int show_smap(struct seq_file *m, void *v)
 		priv->swap_uss += mss.swap_uss;
 	}
 #endif
+}
 
-	m_cache_vma(m, vma);
+static int show_smap(struct seq_file *m, void *v)
+{
+	struct vm_area_struct *pad_vma = get_pad_vma(v);
+	struct vm_area_struct *vma = get_data_vma(v);
 
+	if (vma_pages(vma))
+		show_smap_vma(m, vma);
+
+	show_map_pad_vma(vma, pad_vma, m, show_smap_vma, true);
+
+	m_cache_vma(m, v);
 	return 0;
 }
 

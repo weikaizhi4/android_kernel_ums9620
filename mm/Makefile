@@ -44,7 +44,7 @@ obj-y			:= filemap.o mempool.o oom_kill.o fadvise.o \
 			   mm_init.o mmu_context.o percpu.o slab_common.o \
 			   compaction.o vmacache.o \
 			   interval_tree.o list_lru.o workingset.o \
-			   debug.o gup.o $(mmu-y) vmpressure.o
+			   debug.o gup.o pgsize_migration.o $(mmu-y) vmpressure.o
 GCOV_PROFILE_compaction.o := $(CONFIG_SPRD_MEM_GCOV)
 GCOV_PROFILE_vmpressure.o := $(CONFIG_SPRD_MEM_GCOV)
 GCOV_PROFILE_swap.o := $(CONFIG_SPRD_MEM_GCOV)
