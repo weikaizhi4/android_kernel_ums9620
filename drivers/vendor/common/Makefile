@@ -1,6 +1,10 @@
 
 # Makefile for the common kernel device drivers.
-obj-$(CONFIG_TOUCHSCREEN_VENDOR_V2)	+= touchscreen_v2/
+# DSH: the touch stack may be provided by the prebuilt zte_tpd.ko module
+# instead of being built in; the lcd state notifier chain itself stays in the
+# kernel (the display driver calls it), so include this directory when either
+# of the two options is enabled.
+obj-$(if $(CONFIG_TOUCHSCREEN_LCD_NOTIFY),y,$(CONFIG_TOUCHSCREEN_VENDOR_V2))	+= touchscreen_v2/
 obj-$(CONFIG_NXP_TFA9894_SMARTPA)	+= nxp_tfa9894/
 obj-$(CONFIG_POWER_VENDOR_COMMON)	+= power/
 obj-y   += vcfg/

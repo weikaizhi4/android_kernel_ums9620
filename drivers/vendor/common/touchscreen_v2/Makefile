@@ -228,6 +228,6 @@ zte_tpd-$(CONFIG_TOUCHSCREEN_CHIPONE_V2) += \
 	chipone_tddi_v2/cts_strerror.o
 ######################################################
 
-obj-$(CONFIG_TOUCHSCREEN_VENDOR_V2) += lcd_state_notify.o
+obj-$(CONFIG_TOUCHSCREEN_LCD_NOTIFY) += lcd_state_notify.o
 obj-$(CONFIG_TOUCHSCREEN_VENDOR_V2) += zte_tpd.o
 

@@ -13,6 +13,8 @@
 
 #include <drm/drm_atomic_helper.h>
 
+#include <vendor/common/zte_tpd.h>
+
 #include "sprd_crtc.h"
 #include "sprd_dpu.h"
 #include "sprd_dsi_panel.h"
@@ -88,6 +90,17 @@ static int sprd_panel_unprepare(struct drm_panel *p)
 
 	regulator_disable(panel->supply);
 
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_LCD_NOTIFY)
+	/*
+	 * Tell the touch driver that the panel is powered down with its reset
+	 * line low, exactly like the stock vendor kernel does (see
+	 * tpd_lcd_notifier_callback() in the touchscreen driver).  Without
+	 * these notifications the touch controller stays suspended after the
+	 * first screen off/on cycle.
+	 */
+	lcd_notifier_call_chain(LCD_POWER_OFF_RESET_LOW);
+#endif
+
 	return 0;
 }
 
@@ -113,6 +126,10 @@ static int sprd_panel_prepare(struct drm_panel *p)
 		mdelay(5);
 	}
 
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_LCD_NOTIFY)
+	lcd_notifier_call_chain(LCD_POWER_ON);
+#endif
+
 	if (panel->info.reset_gpio) {
 		items = panel->info.rst_on_seq.items;
 		timing = panel->info.rst_on_seq.timing;
@@ -122,6 +139,10 @@ static int sprd_panel_prepare(struct drm_panel *p)
 			mdelay(timing[i].delay);
 		}
 	}
+
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_LCD_NOTIFY)
+	lcd_notifier_call_chain(LCD_RESET);
+#endif
 
 	return 0;
 }
@@ -174,6 +195,10 @@ static int sprd_panel_disable(struct drm_panel *p)
 	DRM_INFO("%s()\n", __func__);
 
 	mutex_lock(&panel->lock);
+
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_LCD_NOTIFY)
+	lcd_notifier_call_chain(LCD_CMD_OFF);
+#endif
 	/*
 	 * FIXME:
 	 * The cancel work should be executed before DPU stop,
@@ -225,6 +250,11 @@ static int sprd_panel_enable(struct drm_panel *p)
 				      msecs_to_jiffies(1000));
 		panel->esd_work_pending = true;
 	}
+
+#if IS_ENABLED(CONFIG_TOUCHSCREEN_LCD_NOTIFY)
+	/* Resume the touch controller now that the panel is up again. */
+	lcd_notifier_call_chain(LCD_CMD_ON);
+#endif
 
 	panel->enabled = true;
 	mutex_unlock(&panel->lock);
