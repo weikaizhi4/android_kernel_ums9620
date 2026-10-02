@@ -2336,11 +2336,21 @@ static int verify_exported_symbols(struct module *mod)
 		for (s = arr[i].sym; s < arr[i].sym + arr[i].num; s++) {
 			if (find_symbol(kernel_symbol_name(s), &owner, NULL,
 					NULL, true, false)) {
-				pr_err("%s: exports duplicate symbol %s"
-				       " (owned by %s)\n",
-				       mod->name, kernel_symbol_name(s),
-				       module_name(owner));
-				return -ENOEXEC;
+				/*
+				 * DSH: keep the module instead of failing the load.
+				 * Android/TWRP user space stops loading the whole
+				 * modules.load list as soon as one insmod fails, and a
+				 * module that merely re-exports a symbol we already
+				 * built in (e.g. lcd_state_notify / zlog_*) would then
+				 * block every module behind it - including the touch
+				 * stack.  find_symbol() always prefers the built-in
+				 * copy, so the duplicate export is harmless.
+				 */
+				pr_warn("%s: ignoring duplicate export of %s"
+					" (owned by %s)\n",
+					mod->name, kernel_symbol_name(s),
+					module_name(owner));
+				continue;
 			}
 		}
 	}
@@ -3725,6 +3735,27 @@ static noinline int do_init_module(struct module *mod)
 	/* Start the module */
 	if (mod->init != NULL)
 		ret = do_one_initcall(mod->init);
+	if (ret != 0) {
+		/*
+		 * DSH: keep the module even when its init fails.
+		 *
+		 * The stock vendor kernel behaves this way, and it matters: the
+		 * vendor tree builds some of these drivers into the kernel
+		 * unconditionally (drivers/vendor/common/sound/Makefile has
+		 * "obj-y += smartpa_stat.o"), so the module of the same name
+		 * that recovery/TWRP loads can only fail - smartpa_stat cannot
+		 * create its /proc/driver/smartpa again, snd-soc-aw883xx cannot
+		 * register its i2c driver again.  Android's and TWRP's first
+		 * stage init treats "Failed to load kernel modules" as fatal and
+		 * kills init, so a strict kernel here means recovery cannot boot
+		 * at all.  The built-in driver keeps working, so warn and keep
+		 * the module loaded.
+		 */
+		pr_warn("%s: init failed with %d (driver is probably already "
+			"provided by the kernel); keeping the module loaded\n",
+			mod->name, ret);
+		ret = 0;
+	}
 	if (ret < 0) {
 		goto fail_free_freeinit;
 	}
