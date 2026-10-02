@@ -150,3 +150,20 @@ x509.genkey
 # zte kernel
 include/vendor
 drivers/vendor
+
+#
+# ---- 本地调试/构建辅助文件（非内核源码，勿提交）----
+#
+/build_*.sh
+/build_*.log
+/package_*.sh
+/package_*.log
+/check_*.py
+/filter_module_lists.py
+/fix_module_metadata.py
+/patch_vendor_modules.py
+/out*/
+/dist/
+/dist_*/
+/out_images/
+.config.dshbak
