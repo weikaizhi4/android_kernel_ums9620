@@ -138,6 +138,7 @@ struct mmc_swcq {
 	bool pump_busy;/*during pump processing*/
 	bool initialized;/*ready to use after initialized*/
 	bool cmdq_mode;/*swcq running mode. 1: cmdq mode 0: hsq mode*/
+	bool force_cmdq;/*user debug switch: pin the cmdq path*/
 	bool timer_running;/*cmdq checking timer running state*/
 	bool mode_need_change;/*mode need change state*/
 	bool hsq_running;/*1: hsq is running 0: hsq in not running*/

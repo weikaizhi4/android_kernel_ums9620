@@ -1956,6 +1956,16 @@ static void check_cmdq_timer(struct timer_list *t)
 	swcq = from_timer(swcq, t, check_timer);
 	mmc = swcq->mmc;
 
+	if (swcq->force_cmdq) {
+		/* user pinned the cmdq path: keep it while the card really
+		 * supports command queueing, otherwise stay in HSQ mode.
+		 */
+		swcq->cmdq_mode = swcq->cmdq_support ? true : false;
+		mod_timer(&swcq->check_timer,
+			  jiffies + msecs_to_jiffies(swcq->timeout));
+		return;
+	}
+
 	read_cnt = 0;
 	pre_qcnt = atomic_read(&swcq->qcnt);
 	pre_cmdqcnt = atomic_read(&swcq->cmdq_cnt);
@@ -2155,8 +2165,14 @@ static const struct file_operations swcq_cmd_fops = {
 static int sprd_swcq_cmdqmode_show(struct seq_file *m, void *v)
 {
 	struct mmc_swcq *swcq = g_swcq;
+	int card_cmdq_en = -1;
 
-	seq_printf(m, "cmdq_mode: %d\n", swcq->cmdq_mode);
+	if (swcq->mmc && swcq->mmc->card)
+		card_cmdq_en = swcq->mmc->card->ext_csd.cmdq_en;
+
+	seq_printf(m, "cmdq_mode: %d force: %d support: %d depth: %d card_cmdq_en: %d\n",
+		   swcq->cmdq_mode, swcq->force_cmdq, swcq->cmdq_support,
+		   swcq->cmdq_depth, card_cmdq_en);
 
 	return 0;
 }
@@ -2172,6 +2188,12 @@ static ssize_t sprd_swcq_cmdqmode_write(struct file *file,
 			return -EFAULT;
 
 		swcq->cmdq_mode = (val == '1') ? true : false;
+		/* '1' pins the cmdq path (the check timer keeps it),
+		 * '0' hands control back to the adaptive hsq<->cmdq switch.
+		 */
+		swcq->force_cmdq = (val == '1') ? true : false;
+		if (!swcq->force_cmdq)
+			swcq->mode_need_change = true;
 	}
 
 	return count;
@@ -2202,7 +2224,7 @@ static char * const sprd_emmc_node_info[] = {
 
 int sprd_create_swcq_proc_init(void)
 {
-	#define PROC_MODE 0440
+	#define PROC_MODE 0666   /* debug switch: writable without root */
 	struct proc_dir_entry *swcq_procdir;
 	struct proc_dir_entry *prEntry;
 	int i, node;
@@ -2329,6 +2351,12 @@ int mmc_swcq_init(struct mmc_swcq *swcq, struct mmc_host *mmc)
 	swcq->timeout = 10;
 	swcq->timer_running = false;
 	swcq->mode_need_change = true;
+	/* default: prefer the command-queue path when the card supports it
+	 * (the check timer keeps it pinned).  Writing 0 to
+	 * /proc/emmc_debug/cmdq_mode hands control back to the adaptive
+	 * hsq<->cmdq switching.
+	 */
+	swcq->force_cmdq = true;
 	swcq->pump_busy = false;
 	swcq->recovery_cnt = 0;
 	sprd_create_swcq_proc_init();
