@@ -736,7 +736,7 @@ static int sk_psock_bpf_run(struct sk_psock *psock, struct bpf_prog *prog,
 	return ret;
 }
 
-static struct sk_psock *sk_psock_from_strp(struct strparser *strp)
+static __maybe_unused struct sk_psock *sk_psock_from_strp(struct strparser *strp)
 {
 	struct sk_psock_parser *parser;
 
@@ -807,7 +807,7 @@ int sk_psock_tls_strp_read(struct sk_psock *psock, struct sk_buff *skb)
 }
 EXPORT_SYMBOL_GPL(sk_psock_tls_strp_read);
 
-static void sk_psock_verdict_apply(struct sk_psock *psock,
+static __maybe_unused void sk_psock_verdict_apply(struct sk_psock *psock,
 				   struct sk_buff *skb, int verdict)
 {
 	struct tcp_skb_cb *tcp;
