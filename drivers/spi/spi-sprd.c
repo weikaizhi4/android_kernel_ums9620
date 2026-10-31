@@ -48,6 +48,16 @@
 #define SPRD_SPI_STS8			0x70
 #define SPRD_SPI_STS9			0x74
 
+/*
+ * A DMA completion that never arrives (lost interrupt, channel torn down by
+ * runtime suspend, controller clock gated at the wrong moment) used to block
+ * the caller forever: the wait below was an unfailable wait_for_completion().
+ * That is how the touch controller's resume work ended up wedged in spi_sync,
+ * taking the driver's mutex with it, so touch stayed dead until reboot.
+ * Bail out with -ETIMEDOUT instead and leave the controller in a usable state.
+ */
+#define SPRD_SPI_XFER_TIMEOUT_MS	2000
+
 /* Bits & mask definition for register CTL0 */
 #define SPRD_SPI_SCK_REV		BIT(13)
 #define SPRD_SPI_NG_TX			BIT(1)
@@ -768,7 +778,23 @@ static int sprd_spi_dma_txrx_bufs(struct spi_device *sdev,
 	}
 
 	sprd_spi_dma_enable(ss, true);
-	wait_for_completion(&(ss->xfer_completion));
+	if (!wait_for_completion_timeout(&ss->xfer_completion,
+			msecs_to_jiffies(SPRD_SPI_XFER_TIMEOUT_MS))) {
+		dev_err(ss->dev,
+			"transfer timed out: mode %#x, len %u, dma %s\n",
+			ss->trans_mode, trans_len,
+			ss->dma.enable ? "on" : "off");
+		/*
+		 * Stop both engines and drop the controller back to idle,
+		 * otherwise it stays wedged and every later transfer (and its
+		 * caller) blocks on this same completion.
+		 */
+		if (ss->dma.dma_chan[SPRD_SPI_RX])
+			dmaengine_terminate_all(ss->dma.dma_chan[SPRD_SPI_RX]);
+		if (ss->dma.dma_chan[SPRD_SPI_TX])
+			dmaengine_terminate_all(ss->dma.dma_chan[SPRD_SPI_TX]);
+		ret = -ETIMEDOUT;
+	}
 
 	if (dma_tmp_txbuf != NULL) {
 		dma_unmap_single(ss->dev,
