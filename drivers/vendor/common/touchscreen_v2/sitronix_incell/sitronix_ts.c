@@ -1167,8 +1167,6 @@ int sitronix_ts_resume(struct device *dev)
 {
 	/* struct sitronix_ts_data *ts_data = dev_get_drvdata(dev); */
 	/* stdbg("%s:%u, ts_data=0x%x\n", __FUNCTION__, __LINE__, (uint32_t)ts_data); */
-	int ret;
-
 	stmsg("run sitronix_ts_resume\n");
 
 	if (gts->skip_first_resume) {
@@ -1190,22 +1188,7 @@ int sitronix_ts_resume(struct device *dev)
 #ifdef SITRONIX_HDL_IN_RESUME
 	sitronix_do_upgrade();
 #endif /* SITRONIX_HDL_IN_RESUME */
-	ret = sitronix_ts_powerdown(gts, false);
-	if (ret < 0) {
-		/*
-		 * The controller did not answer the wake-up read/write.  It can
-		 * be left in a half-suspended state (or the host aborted the
-		 * transfer), and a plain retry then keeps failing while the
-		 * panel is already up.  Hard-reset the chip and try once more
-		 * instead of silently carrying on with a dead controller.
-		 */
-		sterr("%s: wake-up failed (%d), hard-resetting\n", __func__, ret);
-		sitronix_ts_reset_device(gts);
-		msleep(50);
-		ret = sitronix_ts_powerdown(gts, false);
-		if (ret < 0)
-			sterr("%s: wake-up still failing (%d)\n", __func__, ret);
-	}
+	sitronix_ts_powerdown(gts, false);
 	/* kthread_run(sitronix_ts_powerdown_thread, gts, "Sitronix powerdown Thread"); */
 	/* msleep(200); */
 	/* sitronix_ts_reset_device(gts); */

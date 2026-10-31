@@ -49,6 +49,20 @@ struct spi_transfer *xfers;
 uint8_t *spi_buf;
 //uint8_t spi_buf[ST_SPI_FW_ADDRESS_LEN + ST_SPI_FW_DUMMY_LEN + ST_SPI_FW_MAX_TRANS_LEN_READ];
 
+/*
+ * xfers[] and spi_buf are shared by every caller, but each transfer builds its
+ * own stack-local spi_message and links the very same xfers[] entries into it.
+ * SPI is touched from at least three contexts - tpd_wq (panel on/off
+ * suspend/resume), the 1s charger-detect workqueue and the monitor thread - so
+ * two of them running at once corrupt the transfer list.  The SPI core then
+ * walks a broken list forever inside spi_finalize_current_message()/
+ * spi_unmap_msg(): 100% CPU on a kworker that never returns, holding the
+ * controller's bus lock, which leaves touch dead and (because the workqueue is
+ * frozen around it) can wedge system suspend as well.
+ * Serialise the whole buffer-build + transfer + retry sequence.
+ */
+static DEFINE_MUTEX(st_spi_bus_lock);
+
 #define SPI_RETRY_COUNT 3
 
 
@@ -63,6 +77,7 @@ static int sitronix_ts_spi_read(uint16_t addr, uint8_t *data, uint16_t len, void
 	struct spi_device *spi = spi_data->spi_dev;
 
 	spi_message_init(&msg);
+	mutex_lock(&st_spi_bus_lock);
 
 	spi_buf[0] = (addr >> 8) | TS_SPI_READ;
 	spi_buf[1] = addr & 0xFF;
@@ -111,6 +126,7 @@ static int sitronix_ts_spi_read(uint16_t addr, uint8_t *data, uint16_t len, void
 #endif
 	}
 	memcpy(data, spi_buf + ST_SPI_FW_ADDRESS_LEN + ST_SPI_FW_DUMMY_LEN, len);
+	mutex_unlock(&st_spi_bus_lock);
 	return ret;
 }
 
@@ -147,6 +163,7 @@ static int sitronix_ts_spi_write(uint16_t addr, uint8_t *data, uint16_t len, voi
 	struct spi_device *spi = spi_data->spi_dev;
 
 	spi_message_init(&msg);
+	mutex_lock(&st_spi_bus_lock);
 
 	spi_buf[0] = (addr >> 8) & ~TS_SPI_READ;
 	spi_buf[1] = addr & 0xFF;
@@ -193,6 +210,7 @@ static int sitronix_ts_spi_write(uint16_t addr, uint8_t *data, uint16_t len, voi
 #endif
 	}
 
+	mutex_unlock(&st_spi_bus_lock);
 	return ret;
 }
 
