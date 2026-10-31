@@ -189,12 +189,10 @@ static int vbc_rxpx_codec_sc27xx_probe(struct platform_device *pdev)
 	card->num_dapm_widgets = sprd_asoc_card_widgets.size;
 
 	card->late_probe = vbc_rxpx_codec_sc27xx_late_probe;
-	//liyunfan@MULTIMEDIA.AUDIODRIVER.CODEC,add for pa driver,2023/06/16
-	ret = soc_aux_init_only_sia81xx(pdev, card);
-	if (ret < 0) {
-		pr_err("%s: soc_aux_init_only_sia81xx failed!\n", __func__);
-	}
-	//end
+	/* SIPA/sia81xx amp init: the driver is not part of this device's module
+	 * set (AW883xx smart PA is used), so skip it instead of carrying an
+	 * unresolved soc_aux_init_only_sia81xx that blocks snd-soc-sprd-card.
+	 */
 	ret = asoc_sprd_register_card(&pdev->dev, card);
 	if (ret < 0)
 		goto error;

@@ -200,25 +200,17 @@ static int hook_general_spk(int id, int on)
 	return HOOK_OK;
 }
 //liyunfan@MULTIMEDIA.AUDIODRIVER.CODEC,add for pa driver,2023/06/16
-extern int sipa_audio_power_scene_set(int on);
-
+/*
+ * The SIPA (sia81xx) amplifier driver is not part of this device's module set;
+ * its speaker is driven by the AW883xx smart PA instead, so the SIPA hook is
+ * never selected by the device tree.  Keep the hook but drop the external
+ * calls: an unresolved sipa_audio_power_scene_set makes the whole
+ * snd-soc-sprd-card module fail to load (and with it every other audio module
+ * that needs the symbols card exports).
+ */
 static int hook_general_spk_for_sia8xx(int id, int on)
 {
-        int ret = -1;
 	sp_asoc_pr_info("%s enter id: %d, on: %d\n", __func__, id, on);
-	if (on) {
-		ret = sipa_audio_power_scene_set(on);
-		if (0 != ret) {
-			pr_err("%s sipa power on fail!\n", __func__);
-			return -EINVAL;
-		}
-	} else {
-		ret = sipa_audio_power_scene_set(on);
-		if (0 != ret) {
-			pr_err("%s sipa power off fail!\n", __func__);
-			return -EINVAL;
-		}
-	}
 	msleep(22);
 	return HOOK_OK;
 }

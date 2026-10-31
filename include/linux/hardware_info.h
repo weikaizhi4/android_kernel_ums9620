@@ -188,8 +188,21 @@ const char *als;
 //const struct hwinfo_cam_otp *sub_otp;
 } HARDWARE_INFO;
 
-void get_hardware_info_data(enum hardware_id id, const void *data);
-void write_cam_otp_info(enum hardware_id id,struct global_otp_struct *cam_otp);
-char* get_type_name(void);
+/*
+ * The vendor kernel implements these in its own hardware-info driver, which is
+ * not part of this tree.  Provide no-op inlines so out-of-tree modules that
+ * include this header (sprd_sensor, jiiov fingerprint) do not end up with
+ * unresolved symbols and fail to load.
+ */
+static inline void get_hardware_info_data(enum hardware_id id, const void *data)
+{
+	(void)id; (void)data;
+}
+static inline void write_cam_otp_info(enum hardware_id id,
+				      struct global_otp_struct *cam_otp)
+{
+	(void)id; (void)cam_otp;
+}
+static inline char *get_type_name(void) { return NULL; }
 
 #endif
