@@ -1456,7 +1456,12 @@ static int marlin_clk_enable(bool enable)
 	return ret;
 }
 
-static int marlin_avdd18_dcxo_enable(bool enable)
+/*
+ * Non-static so wcn_suspend() can turn the DCXO LDO off on UMS9620 + m3lite;
+ * without it the WCN bus is left in a bad state across suspend/resume and the
+ * wlan driver later fails every command with "can not get msg: hif->exit".
+ */
+int marlin_avdd18_dcxo_enable(bool enable)
 {
 	int ret = 0;
 	struct wcn_match_data *g_match_config = get_wcn_match_config();
