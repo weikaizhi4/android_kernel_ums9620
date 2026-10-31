@@ -23,14 +23,12 @@
 #else
 #define SPRD_SENSOR_VDD_1000MV_VAL	1000000
 #endif
-#define SPRD_SENSOR_VDD_1050MV_VAL	1050000
 #define SPRD_SENSOR_VDD_1100MV_VAL	1100000
 #define SPRD_SENSOR_VDD_1200MV_VAL	1200000
 #define SPRD_SENSOR_VDD_1300MV_VAL	1300000
 #define SPRD_SENSOR_VDD_1500MV_VAL	1500000
 #define SPRD_SENSOR_VDD_1800MV_VAL	1800000
 #define SPRD_SENSOR_VDD_2000MV_VAL	2000000
-#define SPRD_SENSOR_VDD_2200MV_VAL	2200000
 #define SPRD_SENSOR_VDD_2500MV_VAL	2500000
 #define SPRD_SENSOR_VDD_2800MV_VAL	2800000
 #define SPRD_SENSOR_VDD_3000MV_VAL	3000000
@@ -39,20 +37,30 @@
 
 #define SPRD_SENSOR_ID_INIT 0xFFFF
 
+/*
+ * The values of this enum are part of the userspace ABI: the vendor camera HAL
+ * passes them verbatim through SPRD_SENSOR_IO_SET_IOVDD/AVDD/DVDD/CAMMOT, and
+ * the kernel turns them into microvolts.  The vendor kernel module uses a
+ * 13-entry table
+ *   {3800000, 3300000, 3000000, 2800000, 2500000, 2000000, 1800000,
+ *    1500000, 1300000, 1200000, 1100000, 1000000, 0}
+ * and falls back to "vdd_val * 1000" for anything >= 13, so the order below
+ * must stay byte-identical to it.  In particular index 6 is 1800mV (the IOVDD
+ * every sensor on this board asks for) and index 12 closes the rail.
+ * (Verified by disassembling the vendor sprd_sensor.ko.)
+ */
 enum sprd_sensor_vdd_e {
 	SPRD_SENSOR_VDD_3800MV = 0,
 	SPRD_SENSOR_VDD_3300MV,
 	SPRD_SENSOR_VDD_3000MV,
 	SPRD_SENSOR_VDD_2800MV,
 	SPRD_SENSOR_VDD_2500MV,
-	SPRD_SENSOR_VDD_2200MV,
 	SPRD_SENSOR_VDD_2000MV,
 	SPRD_SENSOR_VDD_1800MV,
 	SPRD_SENSOR_VDD_1500MV,
 	SPRD_SENSOR_VDD_1300MV,
 	SPRD_SENSOR_VDD_1200MV,
 	SPRD_SENSOR_VDD_1100MV,
-	SPRD_SENSOR_VDD_1050MV,
 	SPRD_SENSOR_VDD_1000MV,
 	SPRD_SENSOR_VDD_CLOSED,
 	SPRD_SENSOR_VDD_UNUSED

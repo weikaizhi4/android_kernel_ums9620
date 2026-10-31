@@ -159,9 +159,6 @@ static unsigned int sprd_sensor_get_voltage_value(unsigned int vdd_val)
 	case SPRD_SENSOR_VDD_2500MV:
 		volt_value = SPRD_SENSOR_VDD_2500MV_VAL;
 		break;
-	case SPRD_SENSOR_VDD_2200MV:
-		volt_value = SPRD_SENSOR_VDD_2200MV_VAL;
-		break;
 	case SPRD_SENSOR_VDD_2000MV:
 		volt_value = SPRD_SENSOR_VDD_2000MV_VAL;
 		break;
@@ -179,9 +176,6 @@ static unsigned int sprd_sensor_get_voltage_value(unsigned int vdd_val)
 		break;
 	case SPRD_SENSOR_VDD_1100MV:
 		volt_value = SPRD_SENSOR_VDD_1100MV_VAL;
-		break;
-	case SPRD_SENSOR_VDD_1050MV:
-		volt_value = SPRD_SENSOR_VDD_1050MV_VAL;
 		break;
 	case SPRD_SENSOR_VDD_1000MV:
 		volt_value = SPRD_SENSOR_VDD_1000MV_VAL;
