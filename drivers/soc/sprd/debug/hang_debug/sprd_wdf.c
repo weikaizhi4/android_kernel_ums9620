@@ -68,9 +68,27 @@ static enum hrtimer_restart sprd_wdt_timer_func(struct hrtimer *hrtimer)
 	return HRTIMER_RESTART;
 }
 
+/*
+ * The smpboot callbacks below are invoked on the CPU driving the hotplug
+ * operation, not necessarily on @cpu itself, so they must not use
+ * this_cpu_ptr(): doing so arms the *caller's* timer instead of @cpu's.
+ *
+ * That is exactly how a deep-suspend resume ends up with only CPU0 feeding
+ * the watchdog: hang_debug_park() cancels each secondary CPU's timer as it
+ * goes down, hang_debug_unpark() then "restarts" it with this_cpu_ptr() while
+ * running on CPU0, so CPU1..7 keep the cancelled timer forever.  The feed
+ * round needs every online CPU to set its bit in cpu_feed_bitmap, so it never
+ * completes again and the hardware watchdog is never petted: the pretimeout
+ * FIQ fires ~20s later and the SoC resets itself while the system is
+ * perfectly healthy (all CPUs idle in arch_cpu_idle).
+ *
+ * sprd_wdf_wdt_disable() already restarts the timers the right way, with
+ * smp_call_function_single(cpu, smp_hrtimer_start, ...); these callbacks need
+ * the equivalent per_cpu_ptr() addressing.
+ */
 static void sprd_wdf_hrtimer_enable(unsigned int cpu)
 {
-	struct hrtimer *hrtimer = this_cpu_ptr(&sprd_wdt_hrtimer);
+	struct hrtimer *hrtimer = per_cpu_ptr(&sprd_wdt_hrtimer, cpu);
 
 	hrtimer_init(hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 	hrtimer->function = sprd_wdt_timer_func;
@@ -96,7 +114,7 @@ static int hang_debug_should_run(unsigned int cpu)
 
 static void hang_debug_park(unsigned int cpu)
 {
-	struct hrtimer *hrtimer = this_cpu_ptr(&sprd_wdt_hrtimer);
+	struct hrtimer *hrtimer = per_cpu_ptr(&sprd_wdt_hrtimer, cpu);
 
 	mutex_lock(&wdf_mutex);
 	cpu_feed_mask &= (~(1U << cpu));
@@ -128,7 +146,7 @@ static void hang_debug_unpark(unsigned int cpu)
 	if (wdd->ops->start)
 		wdd->ops->start(wdd);
 #endif
-	hrtimer_start(this_cpu_ptr(&sprd_wdt_hrtimer),
+	hrtimer_start(per_cpu_ptr(&sprd_wdt_hrtimer, cpu),
 			ms_to_ktime(g_interval * MSEC_PER_SEC),
 			HRTIMER_MODE_REL_PINNED);
 out:
