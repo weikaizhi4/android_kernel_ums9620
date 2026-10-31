@@ -1,0 +1,34 @@
+# Build OEM-equivalent modules from in-tree sources instead of using the
+# vendor prebuilt blobs.  Verified to produce functionally equivalent
+# binaries (stripped size ratio 0.87-1.03x, symbol overlap >90%).
+#
+# Apply with:
+#   scripts/config --file <OUT>/.config \
+#     -m ION_SPRD -m DRM_SPRD -m DRM_SPRD_GSP -m SPRD_WCN_BT_TTY
+#   scripts/config --file <OUT>/.config \
+#     -e DRM_SPRD_DPU0 -e DRM_SPRD_DSI -e DRM_SPRD_DPU1 -e DRM_SPRD_DP
+#
+# NOTE: CONFIG_TOUCHSCREEN_LCD_NOTIFY must stay =m; the accompanying
+# Makefile fix (drivers/vendor/common/touchscreen_v2/Makefile) defines
+# CONFIG_TOUCHSCREEN_LCD_NOTIFY for the =m case so the file is not
+# compiled to an empty object.
+
+# --- replaces vendor sprd-ion.ko ---
+CONFIG_ION_SPRD=m
+
+# --- replaces vendor sprd-drm.ko (needs the DPU0/DSI bools) ---
+CONFIG_DRM_SPRD=m
+CONFIG_DRM_SPRD_DPU0=y
+CONFIG_DRM_SPRD_DSI=y
+CONFIG_DRM_SPRD_DPU1=y
+CONFIG_DRM_SPRD_DP=y
+
+# --- replaces vendor sprd-gsp.ko ---
+CONFIG_DRM_SPRD_GSP=m
+
+# --- replaces vendor sprdbt_tty.ko (needs UNISOC_WCN_BSP) ---
+CONFIG_UNISOC_WCN_BSP=m
+CONFIG_SPRD_WCN_BT_TTY=m
+
+# --- required by sprd-drm.ko at link time (exports lcd_notifier_call_chain) ---
+CONFIG_TOUCHSCREEN_LCD_NOTIFY=m

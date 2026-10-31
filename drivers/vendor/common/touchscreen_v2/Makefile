@@ -4,6 +4,12 @@
 ifeq ($(CONFIG_VENDOR_ZTE_LOG_EXCEPTION),m)
 	ccflags-y += -DCONFIG_VENDOR_ZTE_LOG_EXCEPTION
 endif
+# lcd_state_notify.c guards its whole body with #ifdef CONFIG_TOUCHSCREEN_LCD_NOTIFY,
+# which is undefined when the option is =m (only _MODULE is defined), so the file
+# compiled to an empty object and exported nothing.  Define it explicitly.
+ifeq ($(CONFIG_TOUCHSCREEN_LCD_NOTIFY),m)
+	ccflags-y += -DCONFIG_TOUCHSCREEN_LCD_NOTIFY
+endif
 ccflags-y += -I$(srctree)/drivers/vendor/common/touchscreen_v2/
 ccflags-y += -I$(srctree)/drivers/vendor/common/touchscreen_v2/goodix_berlin_driver_v2/firmware_config/$(CONFIG_TOUCHSCREEN_BOARD_NAME)/
 ccflags-y += -I$(srctree)/drivers/vendor/common/touchscreen_v2/chipone_tddi_v2/firmware_config/$(CONFIG_TOUCHSCREEN_BOARD_NAME)/
