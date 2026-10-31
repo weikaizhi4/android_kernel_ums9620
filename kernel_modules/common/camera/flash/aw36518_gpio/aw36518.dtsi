@@ -1,0 +1,16 @@
+&i2c3 {
+    status = "okay";
+    flash_ic: flash-ic@63 {
+         compatible = "awinic,flash-aw36518";
+         reg = <0x63>;
+         sprd,flash-ic = <36518>;
+         sprd,torch-level = <50>;
+         sprd,preflash-level = <50>;
+         sprd,highlight-level = <100>;
+         sprd,touch-max-level = <128>;
+         sprd,flash-max-level = <128>;
+         sprd,lvfm-enable = <1>;
+         flash-torch-en-gpios = <&ap_gpio 139 0>;
+     };
+};
+
