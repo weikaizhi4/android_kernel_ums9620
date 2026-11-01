@@ -9,9 +9,12 @@
 
 #include "backend_lz4hc.h"
 
+/*
+ * LZ4 >= 1.9 manages the HC match tables itself, so no per-context workspace
+ * is needed any more; the context only has to exist.
+ */
 struct lz4hc_ctx {
-	/* working memory for LZ4_compress_HC() */
-	void *mem;
+	int unused;
 };
 
 static void lz4hc_release_params(struct zcomp_params *params)
@@ -51,7 +54,6 @@ static void lz4hc_destroy(struct zcomp_ctx *ctx)
 	if (!zctx)
 		return;
 
-	vfree(zctx->mem);
 	kfree(zctx);
 	ctx->context = NULL;
 }
@@ -66,25 +68,16 @@ static int lz4hc_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
 
 	ctx->context = zctx;
 
-	zctx->mem = vmalloc(LZ4HC_MEM_COMPRESS);
-	if (!zctx->mem)
-		goto error;
-
 	return 0;
-
-error:
-	lz4hc_destroy(ctx);
-	return -ENOMEM;
 }
 
 static int lz4hc_compress(struct zcomp_params *params, struct zcomp_ctx *ctx,
 			  struct zcomp_req *req)
 {
-	struct lz4hc_ctx *zctx = ctx->context;
 	int ret;
 
 	ret = LZ4_compress_HC(req->src, req->dst, req->src_len, req->dst_len,
-			      params->level, zctx->mem);
+			      params->level);
 	if (!ret)
 		return -EINVAL;
 

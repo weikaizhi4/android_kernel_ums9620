@@ -9,9 +9,13 @@
 
 #include "backend_lz4.h"
 
+/*
+ * LZ4 >= 1.9 keeps its hash table on the stack / in the caller supplied
+ * context, so the per-context workspace this backend used to allocate for
+ * LZ4_compress_fast() is gone; the context only has to exist.
+ */
 struct lz4_ctx {
-	/* working memory for LZ4_compress_fast() */
-	void *mem;
+	int unused;
 };
 
 static void lz4_release_params(struct zcomp_params *params)
@@ -45,7 +49,6 @@ static void lz4_destroy(struct zcomp_ctx *ctx)
 	if (!zctx)
 		return;
 
-	vfree(zctx->mem);
 	kfree(zctx);
 	ctx->context = NULL;
 }
@@ -60,25 +63,16 @@ static int lz4_create(struct zcomp_params *params, struct zcomp_ctx *ctx)
 
 	ctx->context = zctx;
 
-	zctx->mem = vmalloc(LZ4_MEM_COMPRESS);
-	if (!zctx->mem)
-		goto error;
-
 	return 0;
-
-error:
-	lz4_destroy(ctx);
-	return -ENOMEM;
 }
 
 static int lz4_compress(struct zcomp_params *params, struct zcomp_ctx *ctx,
 			struct zcomp_req *req)
 {
-	struct lz4_ctx *zctx = ctx->context;
 	int ret;
 
 	ret = LZ4_compress_fast(req->src, req->dst, req->src_len,
-				req->dst_len, params->level, zctx->mem);
+				req->dst_len, params->level);
 	if (!ret)
 		return -EINVAL;
 

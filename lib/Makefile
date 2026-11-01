@@ -145,9 +145,14 @@ obj-$(CONFIG_REED_SOLOMON) += reed_solomon/
 obj-$(CONFIG_BCH) += bch.o
 obj-$(CONFIG_LZO_COMPRESS) += lzo/
 obj-$(CONFIG_LZO_DECOMPRESS) += lzo/
-obj-$(CONFIG_LZ4_COMPRESS) += lz4/
-obj-$(CONFIG_LZ4HC_COMPRESS) += lz4/
-obj-$(CONFIG_LZ4_DECOMPRESS) += lz4/
+# lib/lz4 provides compressor, HC compressor and decompressor from one
+# directory; add it once so its built-in.a is not merged several times.
+ifneq ($(filter y,$(CONFIG_LZ4_COMPRESS) $(CONFIG_LZ4HC_COMPRESS) $(CONFIG_LZ4_DECOMPRESS)),)
+obj-y += lz4/
+else ifneq ($(filter m,$(CONFIG_LZ4_COMPRESS) $(CONFIG_LZ4HC_COMPRESS) $(CONFIG_LZ4_DECOMPRESS)),)
+obj-m += lz4/
+endif
+obj-$(CONFIG_ZSTD_COMMON) += zstd/
 obj-$(CONFIG_ZSTD_COMPRESS) += zstd/
 obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd/
 obj-$(CONFIG_XZ_DEC) += xz/

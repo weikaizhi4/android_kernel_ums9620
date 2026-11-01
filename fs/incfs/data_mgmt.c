@@ -40,6 +40,8 @@ static void zstd_free_workspace(struct work_struct *work)
 	mutex_lock(&mi->mi_zstd_workspace_mutex);
 	kvfree(mi->mi_zstd_workspace);
 	mi->mi_zstd_workspace = NULL;
+	if (mi->mi_zstd_stream)
+		ZSTD_freeDStream(mi->mi_zstd_stream);
 	mi->mi_zstd_stream = NULL;
 	mutex_unlock(&mi->mi_zstd_workspace_mutex);
 }
@@ -432,25 +434,18 @@ static ssize_t zstd_decompress_safe(struct mount_info *mi,
 		return result;
 
 	if (!mi->mi_zstd_stream) {
-		unsigned int workspace_size = ZSTD_DStreamWorkspaceBound(
-						INCFS_DATA_FILE_BLOCK_SIZE);
-		void *workspace = kvmalloc(workspace_size, GFP_NOFS);
-		ZSTD_DStream *stream;
+		/*
+		 * zstd >= 1.5 no longer exposes a caller supplied workspace:
+		 * the streaming context carries its own buffers and the window
+		 * size is derived from the frame header.
+		 */
+		ZSTD_DStream *stream = ZSTD_createDStream();
 
-		if (!workspace) {
+		if (!stream) {
 			result = -ENOMEM;
 			goto out;
 		}
 
-		stream = ZSTD_initDStream(INCFS_DATA_FILE_BLOCK_SIZE, workspace,
-				  workspace_size);
-		if (!stream) {
-			kvfree(workspace);
-			result = -EIO;
-			goto out;
-		}
-
-		mi->mi_zstd_workspace = workspace;
 		mi->mi_zstd_stream = stream;
 	}
 
